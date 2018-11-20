@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperGra", "SuperGra.csproj", "{C0B6BB32-5871-4DEB-818D-0A52B1D17388}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E80231D3-8CDA-435E-9CF9-AD27A9E71427} = {E80231D3-8CDA-435E-9CF9-AD27A9E71427}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "server", "..\server\server.csproj", "{E80231D3-8CDA-435E-9CF9-AD27A9E71427}"
 EndProject

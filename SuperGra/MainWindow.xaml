@@ -1,12 +1,10 @@
-﻿<Window x:Class="SuperGra.MainWindow"
+﻿<Window x:Name="SuperGra" x:Class="SuperGra.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SuperGra"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        Title="SuperGra" Height="350" Width="525" WindowStartupLocation="CenterScreen" Background="White" Foreground="{x:Null}" WindowState="Maximized">
+	<Grid/>
 </Window>
