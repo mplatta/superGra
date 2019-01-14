@@ -17,8 +17,9 @@ namespace server.Controllers
             new Character { Id = 1, Name = "Test1", Description = "Test1", Class = "AAA", Stats = new Dictionary<string, int>(), Equipment = new List<string>()},
             new Character { Id = 2, Name = "Test11", Description = "Test2", Class = "BBB", Stats = new Dictionary<string, int>(), Equipment = new List<string>()},
             new Character { Id = 3, Name = "Test111", Description = "Test3", Class = "CCC", Stats = new Dictionary<string, int>(), Equipment = new List<string>()}
-        };       
+        };
 
+        [HttpGet]
         public IEnumerable<Character> GetAllCharacters()
         {            
             characters[0].Stats.Add("AGI", 59);
@@ -30,6 +31,7 @@ namespace server.Controllers
             return characters;
         }
 
+        [HttpGet]
         public IHttpActionResult GetCharacter(int id)
         {
             var product = characters.FirstOrDefault((p) => p.Id == id);
@@ -41,11 +43,11 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public IEnumerable<Character> CreateCharacter([FromBody] Character character)
-        {
-            characters[0] = character;           
+        public IHttpActionResult CreateCharacter([FromBody] Character character)
+        {            
+            Test test = new Test { Status = character.ToDatabase() };
 
-            return characters;
+            return Ok(test);            
         }
     }
 }
