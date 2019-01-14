@@ -13,5 +13,29 @@ namespace SuperGra
 	/// </summary>
 	public partial class App : Application
 	{
+		private PipeMenager pipeMenager;
+
+		internal PipeMenager PipeMenager
+		{
+			get
+			{
+				return pipeMenager;
+			}
+
+			set
+			{
+				pipeMenager = value;
+			}
+		}
+
+		private void Application_Startup(object o, StartupEventArgs e)
+		{
+			pipeMenager = PipeMenager.getInstance();
+
+			MainWindow wnd = new MainWindow();
+
+			wnd.Title = "Super GRA";
+			wnd.Show();
+		}
 	}
 }

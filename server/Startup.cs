@@ -10,8 +10,25 @@ namespace server
 {
     public partial class Startup
     {
-        public void Configuration(IAppBuilder app)
+		private PipeMenager pipeMenager;
+
+		internal PipeMenager PipeMenager
+		{
+			get
+			{
+				return pipeMenager;
+			}
+
+			set
+			{
+				pipeMenager = value;
+			}
+		}
+
+		public void Configuration(IAppBuilder app)
         {
+			pipeMenager = PipeMenager.getInstance();
+
             ConfigureAuth(app);
         }
     }

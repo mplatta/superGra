@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO.Pipes;
-using System.IO;
+using System.Web;
 
-namespace SuperGra
+namespace server
 {
 	class PipeMenager
 	{
@@ -88,7 +85,7 @@ namespace SuperGra
 				serverPipe.Close();
 			}
 		}
-			
+
 		public static PipeMenager getInstance()
 		{
 			if (_instance != null)
