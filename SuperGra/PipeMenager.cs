@@ -43,7 +43,7 @@ namespace SuperGra
 				streamWriter = new StreamWriter(clientPipe);
 				streamWriter.AutoFlush = true;
 
-
+				streamReader = new StreamReader(clientPipe);
 			}
 		}
 
@@ -52,6 +52,11 @@ namespace SuperGra
 			if (serverPipe != null)
 			{
 				serverPipe.WaitForConnection();
+
+				streamReader = new StreamReader(serverPipe);
+
+				streamWriter = new StreamWriter(serverPipe);
+				streamWriter.AutoFlush = true;
 			}
 		}
 

@@ -28,7 +28,7 @@ namespace server
 		public void Configuration(IAppBuilder app)
         {
 			pipeMenager = PipeMenager.getInstance();
-
+			//pipeMenager.
             ConfigureAuth(app);
         }
     }
