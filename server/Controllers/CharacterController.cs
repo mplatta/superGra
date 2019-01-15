@@ -44,8 +44,9 @@ namespace server.Controllers
 
         [HttpPost]
         public IHttpActionResult CreateCharacter([FromBody] Character character)
-        {            
-            Test test = new Test { Status = character.ToDatabase() };
+        {
+            Database db = Database.Instance;
+            Test test = new Test { Status =  db.InsertCharacter(character)};            
 
             return Ok(test);            
         }
