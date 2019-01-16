@@ -1,8 +1,12 @@
-﻿using SuperGra.Model;
+﻿using Gma.QrCodeNet.Encoding;
+using Gma.QrCodeNet.Encoding.Windows.Render;
+using SuperGra.Model;
 using SuperGra.ViewModel;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SuperGra
 {
@@ -20,6 +24,7 @@ namespace SuperGra
             DataContext = vm;
 
             vm.AllItems = new ObservableCollection<MyItem>();
+            qr_Generate();
         }
 
         private void bAdd_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -35,6 +40,18 @@ namespace SuperGra
         private void bLoad_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             vm.AllItems = repository.Load<ObservableCollection<MyItem>>();
+        }
+
+        private void qr_Generate()
+        {
+            QrEncoder encoder = new QrEncoder(ErrorCorrectionLevel.M);
+            QrCode qrCode;
+            encoder.TryEncode("255.255.255.255", out qrCode);
+            WriteableBitmapRenderer wRenderer = new WriteableBitmapRenderer(new FixedModuleSize(2, QuietZoneModules.Two), Colors.Black, Colors.White);
+            WriteableBitmap wBitmap = new WriteableBitmap(50, 50, 35, 35, PixelFormats.Gray8, null);
+            wRenderer.Draw(wBitmap, qrCode.Matrix);
+
+            QrCodeImage.Source = wBitmap;
         }
     }
 }

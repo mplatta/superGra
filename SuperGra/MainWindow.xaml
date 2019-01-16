@@ -53,7 +53,12 @@
 
             <StackPanel VerticalAlignment="Bottom" Margin="20">
                 <TextBlock Text="IP: 255.255.255.255" Foreground="White" FontSize= "15"/>
-                <Image Source="Media/qr.png" Height="150"/>
+                <Image x:Name="QrCodeImage"/>
+                <!--<Grid Width="200" Height="200">
+                    <Grid.Background>
+                        <ImageBrush x:Name="pictureBoxQRCode" ImageSource="Media/qr.png"/>
+                    </Grid.Background>-->
+                <!--</Grid>-->
             </StackPanel>
         </Grid>
     </Grid>
