@@ -52,7 +52,7 @@
             </StackPanel>
 
             <StackPanel VerticalAlignment="Bottom" Margin="20">
-                <TextBlock Text="IP: 255.255.255.255" Foreground="White" FontSize= "15"/>
+                <TextBlock Name="txb_ip" Text="IP: 255.255.255.255" Foreground="White" FontSize= "15"/>
                 <Image x:Name="QrCodeImage"/>
                 <!--<Grid Width="200" Height="200">
                     <Grid.Background>
