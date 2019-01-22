@@ -84,8 +84,11 @@ namespace server
 
                 content = state.sb.ToString();
                 if (content.IndexOf("<EOF>") > -1)
-                {                  
-                        Actions(content, state);                   
+                {
+                    Actions(content, state);
+                    state.sb.Clear();
+                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReadCallback), state);
                 }
                 else
                 {
@@ -109,10 +112,7 @@ namespace server
         {
             try
             {
-                Socket handler = (Socket)ar.AsyncState;
-
-                int bytesSent = handler.EndSend(ar);               
-
+                Socket handler = (Socket)ar.AsyncState;                
             }
             catch (Exception e)
             {
@@ -231,7 +231,7 @@ namespace server
                     break;                
                 default:                   
                     break;
-            }
+            }           
         }
 
         private static void Disconnect(int id)
