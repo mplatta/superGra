@@ -195,8 +195,7 @@ namespace server
                     }
                     break;
                 case 5:
-                    from = json.From;
-                    to = json.To;
+                    from = json.From;                    
                     roll = json.Roll;
 
                     data = "{'Action':4, 'Roll':" + roll + ", 'From':" + from + "}";
