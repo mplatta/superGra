@@ -1,28 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SuperGra.Model;
+using SuperGra.ViewModel;
+using System;
+using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SuperGra
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
 	{
-		public MainWindow()
+        MainViewModel vm = new MainViewModel();
+        Data.Repository repository = new Data.Repository();
+
+        public MainWindow()
 		{
 			InitializeComponent();
-		}
-	}
+            DataContext = vm;
+
+            vm.AllItems = new ObservableCollection<MyItem>();
+        }
+
+        private void bAdd_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString() });
+        }
+
+        private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            repository.Save<ObservableCollection<MyItem>>(vm.AllItems);
+        }
+
+        private void bLoad_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            vm.AllItems = repository.Load<ObservableCollection<MyItem>>();
+        }
+    }
 }
