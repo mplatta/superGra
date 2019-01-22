@@ -23,13 +23,11 @@ namespace server
         }
 
         public static void StartListening()
-        {
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+        {           
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, 11000);
 
 
-            Socket listener = new Socket(ipAddress.AddressFamily,
+            Socket listener = new Socket(AddressFamily.InterNetwork,
                 SocketType.Stream, ProtocolType.Tcp);
 
             try
