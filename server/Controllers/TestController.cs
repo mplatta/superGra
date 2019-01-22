@@ -15,7 +15,7 @@ namespace server.Controllers
         {
             //TODO
             //Sprawdzić czy łaczy się z aplikacją
-            Test test = new Test { Status = true };
+            Result test = new Result { Status = true };
             return Ok(test);
         }
     }
