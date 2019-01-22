@@ -6,6 +6,8 @@ using SuperGra.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net;
+using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -46,11 +48,28 @@ namespace SuperGra
             vm.AllItems = repository.Load<ObservableCollection<MyItem>>();
         }
 
+		private string _getLocalIp()
+		{
+			var host = Dns.GetHostEntry(Dns.GetHostName());
+			foreach (var ip in host.AddressList)
+			{
+				if (ip.AddressFamily == AddressFamily.InterNetwork)
+				{
+					return ip.ToString();
+				}
+			}
+			throw new Exception("No network adapters with an IPv4 address in the system!");
+		}
+
         private void qr_Generate()
         {
-            QrEncoder encoder = new QrEncoder(ErrorCorrectionLevel.M);
+			string ip = _getLocalIp();
+
+			txb_ip.Text = "IP: " + ip;
+			
+			QrEncoder encoder = new QrEncoder(ErrorCorrectionLevel.M);
             QrCode qrCode;
-            encoder.TryEncode("255.255.255.255", out qrCode);
+            encoder.TryEncode(ip, out qrCode);
             WriteableBitmapRenderer wRenderer = new WriteableBitmapRenderer(new FixedModuleSize(2, QuietZoneModules.Two), Colors.Black, Colors.White);
             WriteableBitmap wBitmap = new WriteableBitmap(50, 50, 35, 35, PixelFormats.Gray8, null);
             wRenderer.Draw(wBitmap, qrCode.Matrix);

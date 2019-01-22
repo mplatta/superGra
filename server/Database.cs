@@ -37,7 +37,7 @@ namespace server
 
         public void Start()
         {
-            DropTables();            
+            //DropTables();            
             CreateCharacterTable();
             CreateEquipmentTable();
             CreateStatsTable();
@@ -65,7 +65,7 @@ namespace server
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                //Console.WriteLine(ex.ToString());
             }
             conn.Close();
         }      
@@ -90,7 +90,7 @@ namespace server
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                //Console.WriteLine(ex.ToString());
             }
             conn.Close();
         }
@@ -116,7 +116,7 @@ namespace server
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                //Console.WriteLine(ex.ToString());
             }
             conn.Close();
         }
@@ -141,7 +141,7 @@ namespace server
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                //Console.WriteLine(ex.ToString());
             }
             conn.Close();
         }
@@ -172,7 +172,7 @@ namespace server
                 cmd.Parameters.Add("@class", SqlDbType.VarChar).Value = character.Class;               
                 cmd.ExecuteNonQuery();
 
-                foreach (KeyValuePair<string, int> entry in character.Stats)
+                foreach (Stat entry in character.Stats)
                 {
                     cmd = new SqlCommand();
                     cmd.Connection = conn;
@@ -181,7 +181,7 @@ namespace server
                     + "(name, value, idCharacter) "
                     + "VALUES (@name, @value, @idCharacter)"
                     , DBName);                    
-                    cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = entry.Key;
+                    cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = entry.Name;
                     cmd.Parameters.Add("@value", SqlDbType.Int).Value = entry.Value;
                     cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = character.Id;
                     cmd.ExecuteNonQuery();
@@ -213,5 +213,363 @@ namespace server
             return add;
         }
 
+        public List<Character> GetCharacters()
+        {
+            List<Character> characters = new List<Character>();
+
+            SqlConnection conn = new SqlConnection(ConnStr);
+
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = String.Format("SELECT idCharacter, name, description, class FROM [{0}].[Character]", DBName);
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    int idCharacter = reader.GetInt32(0);
+                    String characterName = reader.GetString(1);
+                    String characterDescription = reader.GetString(2);
+                    String characterClass = reader.GetString(3);
+
+                    List<Stat> stats = new List<Stat>();
+
+                    List<string> equipment = new List<string>();
+
+                    characters.Add(new Character
+                    {
+                        Id = idCharacter,
+                        Name = characterName,
+                        Description = characterDescription,
+                        Class = characterClass,
+                        Stats = stats,
+                        Equipment = equipment
+                    });
+                }
+            }
+
+            foreach (Character character in characters)
+            {
+
+                cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = String.Format("SELECT name, value FROM [{0}].[Stats] WHERE idCharacter = @idCharacter", DBName);
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = character.Id;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        String statName = reader.GetString(0);
+                        int statValue = reader.GetInt32(1);
+                        Stat stat = new Stat { Name = statName, Value = statValue};
+                        character.Stats.Add(stat);
+                    }
+                }
+
+                cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = String.Format("SELECT name FROM [{0}].[Equipment] WHERE idCharacter = @idCharacter", DBName);
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = character.Id;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        String equipmentName = reader.GetString(0);
+                        character.Equipment.Add(equipmentName);
+                    }
+                }
+            }
+
+            conn.Close();
+
+            return characters;
+        }
+
+        public Character GetCharacter(int idCharacter)
+        {
+            Character character;
+
+            SqlConnection conn = new SqlConnection(ConnStr);
+
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = String.Format("SELECT name, description, class FROM [{0}].[Character] WHERE idCharacter = @idCharacter", DBName);
+            cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = idCharacter;
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    String characterName = reader.GetString(0);
+                    String characterDescription = reader.GetString(1);
+                    String characterClass = reader.GetString(2);
+
+                   List<Stat> stats = new List<Stat>();
+
+                    List<string> equipment = new List<string>();
+
+                    character = new Character
+                    {
+                        Id = idCharacter,
+                        Name = characterName,
+                        Description = characterDescription,
+                        Class = characterClass,
+                        Stats = stats,
+                        Equipment = equipment
+                    };
+                }
+                else
+                    return null;
+            }
+
+
+            cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = String.Format("SELECT name, value FROM [{0}].[Stats] WHERE idCharacter = @idCharacter", DBName);
+            cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = idCharacter;
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    String statName = reader.GetString(0);
+                    int statValue = reader.GetInt32(1);
+                    Stat stat = new Stat { Name = statName, Value = statValue };
+                    character.Stats.Add(stat);
+                }
+            }
+
+            cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = String.Format("SELECT name FROM [{0}].[Equipment] WHERE idCharacter = @idCharacter", DBName);
+            cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = idCharacter;
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    String equipmentName = reader.GetString(0);
+                    character.Equipment.Add(equipmentName);
+                }
+            }
+
+            conn.Close();
+
+            return character;
+        }
+
+        public bool DeleteCharacter(int id)
+        {
+            bool delete = true;
+
+            SqlConnection conn = new SqlConnection(ConnStr);
+
+            conn.Open();
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = String.Format("DELETE FROM [{0}].[Equipment] WHERE idCharacter = @idCharacter", DBName);
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = id;
+                cmd.ExecuteNonQuery();
+
+                cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = String.Format("DELETE FROM [{0}].[Stats] WHERE idCharacter = @idCharacter", DBName);
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = id;
+                cmd.ExecuteNonQuery();
+
+                cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = String.Format("DELETE FROM [{0}].[Character] WHERE idCharacter = @idCharacter", DBName);
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = id;
+                if (cmd.ExecuteNonQuery() == 0)
+                    delete = false;
+            }
+            catch (Exception)
+            {
+                delete = false;
+            }
+
+            return delete;
+        }
+
+        public bool DeleteStat(int id, String statName)
+        {
+            bool delete = true;
+
+            SqlConnection conn = new SqlConnection(ConnStr);
+
+            conn.Open();
+            try
+            {
+                SqlCommand cmd = new SqlCommand();                
+                cmd.Connection = conn;
+                cmd.CommandText = String.Format("DELETE FROM [{0}].[Stats] WHERE idCharacter = @idCharacter AND name = @name", DBName);
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = id;
+                cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = statName;
+                if (cmd.ExecuteNonQuery() == 0)
+                    delete = false;
+            }
+            catch (Exception)
+            {
+                delete = false;
+            }
+
+            return delete;
+        }
+
+        public bool DeleteItem(int id, String itemName)
+        {
+            bool delete = true;
+
+            SqlConnection conn = new SqlConnection(ConnStr);
+
+            conn.Open();
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = String.Format("DELETE FROM [{0}].[Equipment] WHERE idCharacter = @idCharacter AND name = @name", DBName);
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = id;
+                cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = itemName;
+                if (cmd.ExecuteNonQuery() == 0)
+                    delete = false;
+            }
+            catch (Exception)
+            {
+                delete = false;
+            }
+
+            return delete;
+        }
+
+        public bool AddStat(int id, Stat stat)
+        {
+            bool add = true;
+
+            SqlConnection conn = new SqlConnection(ConnStr);
+
+            conn.Open();
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = String.Format("INSERT INTO [{0}].[Stats]"
+                     + "(name, value, idCharacter) "
+                     + "VALUES (@name, @value, @idCharacter)"
+                     , DBName);
+                cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = stat.Name;
+                cmd.Parameters.Add("@value", SqlDbType.Int).Value = stat.Value;
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = id;
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                add = false;
+            }
+
+            return add;
+        }
+
+        public bool AddItem(int id, String itemName)
+        {
+            bool add = true;
+
+            SqlConnection conn = new SqlConnection(ConnStr);
+
+            conn.Open();
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;               
+                cmd.CommandText = String.Format("INSERT INTO [{0}].[Equipment]"
+                + "(name, idCharacter) "
+                + "VALUES (@name, @idCharacter)"
+                , DBName);
+                cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = itemName;
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = id;
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                add = false;
+            }
+
+            return add;
+        }
+
+        public bool UpdateStat(int id, Stat stat)
+        {
+            bool update = true;
+
+            SqlConnection conn = new SqlConnection(ConnStr);
+
+            conn.Open();
+            try
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = String.Format("UPDATE [{0}].[Stats]"
+                     + "SET value = @value "
+                     + "WHERE idCharacter = @idCharacter AND name = @name"
+                     , DBName);
+                cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = stat.Name;
+                cmd.Parameters.Add("@value", SqlDbType.Int).Value = stat.Value;
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = id;
+                if(cmd.ExecuteNonQuery() == 0)
+                    update = false;
+            }
+            catch (Exception)
+            {
+                update = false;
+            }
+
+            return update;
+        }
+
+        public bool UpdateCharacter(int id, String characterName, String characterDescription, String characterClass)
+        {
+            bool update = true;
+
+            SqlConnection conn = new SqlConnection(ConnStr);
+
+            conn.Open();
+            try
+            {
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+
+                String command = "UPDATE [{0}].[Character] SET "
+                    + "name = @name, "
+                    + "description = @description, "
+                    + "class = @class "
+                    + "WHERE idCharacter = @idCharacter";
+
+                cmd.CommandText = String.Format(command
+                     , DBName);
+
+                cmd.Parameters.Add("@idCharacter", SqlDbType.Int).Value = id;
+                cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = characterName;
+                cmd.Parameters.Add("@description", SqlDbType.VarChar).Value = characterDescription;
+                cmd.Parameters.Add("@class", SqlDbType.VarChar).Value = characterClass;
+
+                if (cmd.ExecuteNonQuery() == 0)
+                    update = false;
+            }
+            catch (Exception)
+            {
+                update = false;
+            }
+
+            return update;
+        }
     }
 }

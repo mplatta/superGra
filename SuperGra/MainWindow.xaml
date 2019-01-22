@@ -58,9 +58,15 @@
                 <Button x:Name="bLoad" Content="Load" Width="100" Click="bLoad_Click" Margin="5 0" />
                 <Button x:Name="bLoadMap" Content="Load Map" Width="100" Click="bLoadMap_Click" Margin="5 0" />
             </StackPanel>
-            <StackPanel VerticalAlignment="Bottom" Margin="10 40">
-                <TextBlock Text="IP: 255.255.255.255" Foreground="White" FontSize= "15"/>
-                <Image x:Name="QrCodeImage" Width="150" Height="150"/>
+            
+            <StackPanel VerticalAlignment="Bottom" Margin="20">
+                <TextBlock Name="txb_ip" Text="IP: 255.255.255.255" Foreground="White" FontSize= "15"/>
+                <Image x:Name="QrCodeImage"/>
+                <!--<Grid Width="200" Height="200">
+                    <Grid.Background>
+                        <ImageBrush x:Name="pictureBoxQRCode" ImageSource="Media/qr.png"/>
+                    </Grid.Background>-->
+                <!--</Grid>-->
             </StackPanel>
         </Grid>
     </Grid>
