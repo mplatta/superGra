@@ -32,27 +32,31 @@ namespace SuperGra
 			dynamic jsonResult = JsonConvert.DeserializeObject(e.JsonString);
 			string id = jsonResult.Id;
 			
-			Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = id, Nick = id }); }));
+			//Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = id, Nick = id }); }));
 		}
 
-		public MainWindow()
+        public MainWindow()
         {
-			ps = new PostService();
+            //ps = new PostService();
             InitializeComponent();
             DataContext = vm;
-            
+
             vm.AllItems = new ObservableCollection<MyItem>();
+            for (var i = 0; i < 5; i++)
+            {
+                vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle", UserType="Pokemon" });
+            }
             qr_Generate();
 
-			ps.es += getEvent;
-			ps.start();
+			//ps.es += getEvent;
+			//ps.start();
 
         }
 
         private void bAdd_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			//vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
-			Debug.WriteLine(ps.sendNews("{'Id':'gggg', 'Action':1}").ToString());
+			//Debug.WriteLine(ps.sendNews("{'Id':'gggg', 'Action':1}").ToString());
         }
 
         private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)

@@ -5,33 +5,41 @@
         Title="SuperGra" Height="600" Width="1024" WindowState="Maximized">
     <Window.Resources>
         <DataTemplate x:Key="Widget">
-            <Grid Background="LightGray" local:Attached.CanDrag="True" Height="Auto" Width="200" Tag="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}">
+            <Grid Background="LightGray" local:Attached.CanDrag="True" Height="350" Width="325" Tag="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="125"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="29"/>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="60"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-                    <Image Source="{Binding TheImage}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="Auto" />
+                    <Image Source="{Binding TheImage}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="125" />
                 </Grid>
                 <Grid Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
-                        <Label Margin="2" VerticalContentAlignment="Center" FontWeight="Bold" Content="Nick:"/>
-                        <TextBlock VerticalAlignment="Center" Margin="2" Width="100" Text="{Binding Nick}"/>
+                        <Label Content="Nick:" VerticalContentAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Nick}" VerticalAlignment="Center" Width="200"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="2">
-                    <StackPanel>
-                        <Label  Margin="2" FontWeight="Bold" Content="Description:" HorizontalAlignment="Left"/>
-                        <TextBox Margin="2" Width="150" Text="{Binding Description}" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label  Margin="2" FontWeight="Bold" Content="Class:" HorizontalAlignment="Center"/>
+                        <TextBox Margin="2" Width="250" Text="{Binding UserType}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="3">
-                    <TreeView x:Name="trvMenu">
-                        <TreeViewItem Header="Statistic">
-                            <TreeViewItem Header="Streng"/>
-                        </TreeViewItem>
+                    <StackPanel Orientation="Vertical">
+                        <Label  Margin="2" FontWeight="Bold" Content="Description:" HorizontalAlignment="Left"/>
+                        <ScrollViewer Height="50">
+                            <TextBox Text="{Binding Description}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" />
+                        </ScrollViewer>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="4">
+                    <TreeView x:Name="StatisticView">
                     </TreeView>
                 </Grid>
             </Grid>
