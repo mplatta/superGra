@@ -39,8 +39,13 @@
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="4">
-                    <TreeView x:Name="StatisticView">
-                    </TreeView>
+                    <!--<TreeView x:Name="StatisticMenu">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type self:MenuItem}" ItemsSource="{Binding Items}">
+                                <TextBlock Text="{Binding Title}" />
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView--><!-->-->
                 </Grid>
             </Grid>
         </DataTemplate>
