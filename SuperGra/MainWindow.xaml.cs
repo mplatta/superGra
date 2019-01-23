@@ -31,14 +31,14 @@ namespace SuperGra
 		{
 			dynamic jsonResult = JsonConvert.DeserializeObject(e.JsonString);
 			string id = jsonResult.Id;
-			
-			//Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = id, Nick = id }); }));
+
+			Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = id, Nick = id }); }));
 		}
 
-        public MainWindow()
+		public MainWindow()
         {
-            //ps = new PostService();
-            InitializeComponent();
+			ps = new PostService();
+			InitializeComponent();
             DataContext = vm;
 
             vm.AllItems = new ObservableCollection<MyItem>();
@@ -48,16 +48,15 @@ namespace SuperGra
             }
             qr_Generate();
 
-			//ps.es += getEvent;
-			//ps.start();
-
-        }
+			ps.es += getEvent;
+			ps.Start();
+		}
 
         private void bAdd_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			//vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
-			//Debug.WriteLine(ps.sendNews("{'Id':'gggg', 'Action':1}").ToString());
-        }
+			Debug.WriteLine(ps.sendNews("{'Id':'gggg', 'Action':1}").ToString());
+		}
 
         private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -144,5 +143,10 @@ namespace SuperGra
                 }
             }
         }
+
+		~MainWindow()
+		{
+			ps.Stop();
+		}
     }
 }
