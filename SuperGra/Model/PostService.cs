@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
 using System.Net;
 using System.IO;
-using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Threading;
 
@@ -21,24 +16,98 @@ namespace SuperGra.Model
 	{
 		private static readonly string apiGetQueue = "api/queue/GetQueue";
 		private static readonly string apiAddQueue = "api/queue/AddQueue";
-		private static readonly string ipAdress = "http://localhost:34450/";
-		//private static readonly string ipAdress = "http://localhost:34450/api/queue/GetQueue";
-		//private static readonly string ipAdress = "http://192.168.0.5:34450/api/queue/GetQueue";
-		private static bool _isStart = true;
+		private static readonly string ipAdress    = "http://localhost:34450/";
+
+		private static bool _is_start;
+		private static int  _sleep_time;
 
 		public EventHandler<EventString> es;
 
-		public void start()
+		#region Public api
+
+		public void Start()
 		{
+			_is_start = true;
+
 			Thread thread = new Thread(_threadLoop);
 			thread.Start();
 		}
 
+		public void Stop()
+		{
+			_is_start = false;
+		}
+
+		public string GetNews()
+		{
+			string message = "{\"Id\":\"GameMaster\"}";
+
+			return _post_request(ipAdress + apiGetQueue, message);
+		}
+
+		public bool SendNews(string jsonString)
+		{
+			string result = _post_request(ipAdress + apiAddQueue, jsonString);
+			dynamic success;
+
+			if (result != null)
+			{
+				success = JsonConvert.DeserializeObject(result);
+
+				return success.Status;
+			}
+
+			return false;
+		}
+
+		#endregion
+
+		#region Private
+		private string _post_request(string adress, string message)
+		{
+			string result;
+
+			WebRequest request = WebRequest.Create(adress);
+			request.Method = "POST";
+			request.ContentType = "application/json";
+
+			byte[] byteArray = Encoding.UTF8.GetBytes(message);
+			
+			request.ContentLength = byteArray.Length;
+
+			Stream dataStream = request.GetRequestStream();
+
+			dataStream.Write(byteArray, 0, byteArray.Length);
+			dataStream.Close();
+
+			WebResponse response;
+			StreamReader reader;
+
+			try
+			{
+				response = request.GetResponse();
+				dataStream = response.GetResponseStream();
+
+				reader = new StreamReader(dataStream);
+				result = reader.ReadToEnd();
+
+				response.Close();
+				reader.Close();
+				dataStream.Close();
+			}
+			catch (Exception e)
+			{
+				result = null;
+			}
+
+			return result;
+		}
+
 		private void _threadLoop()
 		{
-			while (_isStart)
+			while (_is_start)
 			{
-				string strResult = getNews();
+				string strResult = GetNews();
 				dynamic jsonResult = JsonConvert.DeserializeObject(strResult);
 				int action = jsonResult.Action;
 
@@ -61,70 +130,15 @@ namespace SuperGra.Model
 			}
 		}
 
-		public void stop()
-		{
-			_isStart = false;
-		}
+		#endregion
 
-		public string getNews()
-		{
-			string result;
-
-			WebRequest request = WebRequest.Create(ipAdress + apiGetQueue);
-			request.Method = "POST";
-
-			string postData = "{\"Id\":\"GameMaster\"}";
-			byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-			request.ContentType = "application/json";
-			request.ContentLength = byteArray.Length;
-			Stream dataStream = request.GetRequestStream();
-			dataStream.Write(byteArray, 0, byteArray.Length);
-			dataStream.Close();
-			WebResponse response = request.GetResponse();
-
-			dataStream = response.GetResponseStream();
-			StreamReader reader = new StreamReader(dataStream);
-			result = reader.ReadToEnd();
-
-			reader.Close();
-			dataStream.Close();
-			response.Close();
-
-			return result;
-		}
-
-		public bool sendNews(string jsonString)
-		{
-			string result;
-
-			WebRequest request = WebRequest.Create(ipAdress + apiAddQueue);
-			request.Method = "POST";
-
-			byte[] byteArray = Encoding.UTF8.GetBytes(jsonString);
-			request.ContentType = "application/json";
-			request.ContentLength = byteArray.Length;
-			Stream dataStream = request.GetRequestStream();
-			dataStream.Write(byteArray, 0, byteArray.Length);
-			dataStream.Close();
-			WebResponse response = request.GetResponse();
-
-			dataStream = response.GetResponseStream();
-			StreamReader reader = new StreamReader(dataStream);
-			result = reader.ReadToEnd();
-
-			reader.Close();
-			dataStream.Close();
-			response.Close();
-
-			dynamic success = JsonConvert.DeserializeObject(result);
-
-			return success.Status;
-		}
+		#region Construct
 
 		public PostService()
 		{
-			
+			_sleep_time = 500;
 		}
 
+		#endregion
 	}
 }
