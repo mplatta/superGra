@@ -1,11 +1,13 @@
 ﻿using Gma.QrCodeNet.Encoding;
 using Gma.QrCodeNet.Encoding.Windows.Render;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using SuperGra.Model;
 using SuperGra.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows;
@@ -23,19 +25,34 @@ namespace SuperGra
         MainViewModel vm = new MainViewModel();
         Data.Repository repository = new Data.Repository();
         private ImageBrush imagePhoto { get; set; }
+		private PostService ps;
 
-        public MainWindow()
+		public void getEvent(Object sender, EventString e)
+		{
+			dynamic jsonResult = JsonConvert.DeserializeObject(e.JsonString);
+			string id = jsonResult.Id;
+			
+			Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = id, Nick = id }); }));
+		}
+
+		public MainWindow()
         {
+			ps = new PostService();
             InitializeComponent();
             DataContext = vm;
             
             vm.AllItems = new ObservableCollection<MyItem>();
             qr_Generate();
+
+			ps.es += getEvent;
+			ps.start();
+
         }
 
         private void bAdd_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
+			//vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
+			Debug.WriteLine(ps.sendNews("{'Id':'gggg', 'Action':1}").ToString());
         }
 
         private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)

@@ -19,8 +19,11 @@ namespace SuperGra.Model
 
 	class PostService
 	{
+		private static readonly string apiGetQueue = "api/queue/GetQueue";
+		private static readonly string apiAddQueue = "api/queue/AddQueue";
+		private static readonly string ipAdress = "http://localhost:34450/";
 		//private static readonly string ipAdress = "http://localhost:34450/api/queue/GetQueue";
-		private static readonly string ipAdress = "http://192.168.0.5:34450/api/queue/GetQueue";
+		//private static readonly string ipAdress = "http://192.168.0.5:34450/api/queue/GetQueue";
 		private static bool _isStart = true;
 
 		public EventHandler<EventString> es;
@@ -63,15 +66,11 @@ namespace SuperGra.Model
 			_isStart = false;
 		}
 
-		/// <summary>
-		/// kURWA DZIAla niRUSZc!!!.
-		/// </summary>
-		/// <returns></returns>
 		public string getNews()
 		{
 			string result;
 
-			WebRequest request = WebRequest.Create(ipAdress);
+			WebRequest request = WebRequest.Create(ipAdress + apiGetQueue);
 			request.Method = "POST";
 
 			string postData = "{\"Id\":\"GameMaster\"}";
@@ -92,6 +91,34 @@ namespace SuperGra.Model
 			response.Close();
 
 			return result;
+		}
+
+		public bool sendNews(string jsonString)
+		{
+			string result;
+
+			WebRequest request = WebRequest.Create(ipAdress + apiAddQueue);
+			request.Method = "POST";
+
+			byte[] byteArray = Encoding.UTF8.GetBytes(jsonString);
+			request.ContentType = "application/json";
+			request.ContentLength = byteArray.Length;
+			Stream dataStream = request.GetRequestStream();
+			dataStream.Write(byteArray, 0, byteArray.Length);
+			dataStream.Close();
+			WebResponse response = request.GetResponse();
+
+			dataStream = response.GetResponseStream();
+			StreamReader reader = new StreamReader(dataStream);
+			result = reader.ReadToEnd();
+
+			reader.Close();
+			dataStream.Close();
+			response.Close();
+
+			dynamic success = JsonConvert.DeserializeObject(result);
+
+			return success.Status;
 		}
 
 		public PostService()
