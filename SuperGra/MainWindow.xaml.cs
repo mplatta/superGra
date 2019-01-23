@@ -35,7 +35,7 @@ namespace SuperGra
 
         private void bAdd_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString() });
+            vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
         }
 
         private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)

@@ -9,6 +9,7 @@ namespace SuperGra.Model
 public class MyItem : INotifyPropertyChanged, IMovable
 {
     public string Description { get; set; }
+    public string Nick { get; set; }
 
     string _ImageUri;
     public string ImageUri
