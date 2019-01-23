@@ -19,29 +19,10 @@ namespace server.Controllers
         {
             //TODO
             //Sprawdzić czy łaczy się z aplikacją
-            Result test = new Result { Status = true };
-            return Ok(test);
-        }
+            JObject result = new JObject();
+            result.Add("Status", true);
 
-        [Route("api/test/testq")]
-        [HttpPost]
-        public IHttpActionResult TestQ([FromBody] JObject json)
-        {
-            dynamic jsonToId = JsonConvert.DeserializeObject(json.ToString());
-
-            String message = jsonToId.Message;
-
-            Result result = new Result { Status = true };
-            dupa.Enqueue(message);
-            return Ok(json);
-        }
-
-        [Route("api/test/testget")]
-        [HttpGet]
-        public IEnumerable<string> TestQe()
-        {
-
-            return dupa;
-        }
+            return Ok(result);
+        }        
     }
 }
