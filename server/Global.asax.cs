@@ -1,4 +1,5 @@
-﻿using System;
+﻿using server.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,6 +17,8 @@ namespace server
 		{
             Database db = Database.Instance;
             db.Start();
+
+            QueueController.queue.Add("GameMaster", new Queue<Newtonsoft.Json.Linq.JObject>());
 
             Thread thread = new Thread(AsynchronousSocketListener.StartListening);
             thread.Start();
