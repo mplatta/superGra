@@ -5,13 +5,35 @@
         Title="SuperGra" Height="600" Width="1024" WindowState="Maximized">
     <Window.Resources>
         <DataTemplate x:Key="Widget">
-            <Grid Background="LightGray" local:Attached.CanDrag="True" Tag="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}">
+            <Grid Background="LightGray" local:Attached.CanDrag="True" Height="Auto" Width="200" Tag="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.676*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Image Source="{Binding TheImage}" HorizontalAlignment="Center" Width="75" Height="75" />
-                <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="{Binding Description}"/>
+                <Grid Grid.Row="0">
+                    <Image Source="{Binding TheImage}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Height="Auto" />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Margin="2" VerticalContentAlignment="Center" FontWeight="Bold" Content="Nick:"/>
+                        <TextBlock VerticalAlignment="Center" Margin="2" Width="100" Text="{Binding Nick}"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <StackPanel>
+                        <Label  Margin="2" FontWeight="Bold" Content="Description:" HorizontalAlignment="Left"/>
+                        <TextBox Margin="2" Width="150" Text="{Binding Description}" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <TreeView x:Name="trvMenu">
+                        <TreeViewItem Header="Statistic">
+                            <TreeViewItem Header="Streng"/>
+                        </TreeViewItem>
+                    </TreeView>
+                </Grid>
             </Grid>
         </DataTemplate>
     </Window.Resources>
@@ -62,11 +84,6 @@
             <StackPanel VerticalAlignment="Bottom" Margin="20">
                 <TextBlock Name="txb_ip" Text="IP: 255.255.255.255" Foreground="White" FontSize= "15"/>
                 <Image x:Name="QrCodeImage"/>
-                <!--<Grid Width="200" Height="200">
-                    <Grid.Background>
-                        <ImageBrush x:Name="pictureBoxQRCode" ImageSource="Media/qr.png"/>
-                    </Grid.Background>-->
-                <!--</Grid>-->
             </StackPanel>
         </Grid>
     </Grid>

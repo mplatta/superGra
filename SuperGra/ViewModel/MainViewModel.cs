@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using SuperGra.Model;
 using System.Collections.ObjectModel;
-using System.Windows.Shapes;
-using System.Windows.Media;
 
 namespace SuperGra.ViewModel
 {
