@@ -4,6 +4,7 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Diagnostics;
 
 namespace SuperGra.Model
 {
@@ -60,9 +61,29 @@ namespace SuperGra.Model
 			return false;
 		}
 
+		public string SendGet(string url)
+		{
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+			request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+			using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+			using (Stream stream = response.GetResponseStream())
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				return reader.ReadToEnd();
+			}
+		}
+
+		public string SendPost(string url, string message)
+		{
+			string result = _post_request(url, message);
+			return result;
+		}
+
 		#endregion
 
 		#region Private
+
 		private string _post_request(string adress, string message)
 		{
 			string result;
@@ -132,7 +153,7 @@ namespace SuperGra.Model
 
 		#endregion
 
-		#region Construct
+		#region Constructor
 
 		public PostService()
 		{

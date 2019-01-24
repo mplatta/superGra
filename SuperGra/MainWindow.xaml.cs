@@ -21,57 +21,61 @@ namespace SuperGra
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+	/// 
     public partial class MainWindow : Window
     {
-        MainViewModel vm = new MainViewModel();
-        Data.Repository repository = new Data.Repository();
-        private ImageBrush imagePhoto { get; set; }
-        private PostService ps;
+		// TODO: Zrobić z tego jakiś ładny MVC kiedyś xD
 
+		private static readonly string url             = "http://localhost:34450/";
+		private static readonly string apiGetCharacter = "character";
+
+		private ImageBrush imagePhoto { get; set; }
+		private PostService ps;
+
+		MainViewModel vm = new MainViewModel();
+        Data.Repository repository = new Data.Repository();
+        
         public void getEvent(Object sender, EventString e)
         {
+			Debug.WriteLine(e.JsonString);
             dynamic jsonResult = JsonConvert.DeserializeObject(e.JsonString);
-            string id = jsonResult.Id;
-            Character test = new Character { Id = id, Class = "FDF" };
 
-            Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = test }); }));
-        }
+			int    action = jsonResult.Action;
+			string id     = jsonResult.Id;
 
-        public MainWindow()
-        {
-            ps = new PostService();
-            InitializeComponent();
-            DataContext = vm;
+			Character character;
 
-            vm.AllItems = new ObservableCollection<MyItem>();
+			switch (action)
+			{
+				case 1:	// someone connect from mobile apk
+					// TODO: powiadomienie że ktoś się połączył
+					;
+					break;
+				case 2: // someone create new character
+					// TODO: niezabezpieczone jak null albo zerwie połaczenie
+					character = _get_character_from_url(url + apiGetCharacter + "/" + jsonResult.CharacterId.ToString());
+					AddNewWidget(character);
+					break;
+				case 3: // someone update charater
+					// TODO: niezabezpieczone jak null albo zerwie połaczenie
+					character = _get_character_from_url(url + apiGetCharacter + "/" + jsonResult.CharacterId.ToString());
+					UpdateWidget(character);
+					break;
+				case 4: // dice roll
+					;
+					break;
+				case 5: // message
+					;
+					break;
+				case 6: // avatar img
+					;
+					break;
+			}
+		}
 
-            #region TestRegion
-            //TEST
-            //Character myCharacter = new Character();
-            //myCharacter.Name = "Squirtle";
-            //myCharacter.Class = "Pokemon";
-            //myCharacter.Description = "Typ Wodny";
-            //Stat testParam = new Stat { Name = "Strength", Value = 100 };
-            //Stat testParam2 = new Stat { Name = "Agility", Value = 100 };
-            //Stat testParam3 = new Stat { Name = "Luck", Value = 100 };
-            //Stat testParam4 = new Stat { Name = "Power", Value = 100 };
-            //List<Stat> testList = new List<Stat>();
-            //testList.Add(testParam);
-            //testList.Add(testParam2);
-            //testList.Add(testParam3);
-            //testList.Add(testParam4);
-            //myCharacter.Stats = testList;
-            //MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = myCharacter };
-            //vm.AllItems.Add(testItem);
-            #endregion
+		#region Buttons
 
-            Qr_Generate();
-
-            ps.es += getEvent;
-            ps.Start();
-        }
-
-        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+		private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
 
             //vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
@@ -81,7 +85,7 @@ namespace SuperGra
             //         Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = test }); }));
         }
 
-        private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)
+		private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             repository.Save<ObservableCollection<MyItem>>(vm.AllItems);
         }
@@ -91,36 +95,7 @@ namespace SuperGra
             vm.AllItems = repository.Load<ObservableCollection<MyItem>>();
         }
 
-        private string _getLocalIp()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    return ip.ToString();
-                }
-            }
-            throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
-
-        private void Qr_Generate()
-        {
-            string ip = _getLocalIp();
-
-            txb_ip.Text = "IP: " + ip;
-
-            QrEncoder encoder = new QrEncoder(ErrorCorrectionLevel.M);
-            QrCode qrCode;
-            encoder.TryEncode(ip, out qrCode);
-            WriteableBitmapRenderer wRenderer = new WriteableBitmapRenderer(new FixedModuleSize(2, QuietZoneModules.Two), Colors.Black, Colors.White);
-            WriteableBitmap wBitmap = new WriteableBitmap(50, 50, 35, 35, PixelFormats.Gray8, null);
-            wRenderer.Draw(wBitmap, qrCode.Matrix);
-
-            QrCodeImage.Source = wBitmap;
-        }
-
-        private void BtnLoadMap_Click(object sender, RoutedEventArgs e)
+		private void BtnLoadMap_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog op = new OpenFileDialog();
             op.Title = "Select a picture";
@@ -142,34 +117,128 @@ namespace SuperGra
                     }
                 }
             }
-        }
+		}
 
-        private IEnumerable<T> FindVisualChildren<T>(DependencyObject obj) where T : DependencyObject
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
-                if (child != null && child is T)
-                {
-                    yield return (T)child;
-                }
-                else
-                {
-                    var childOfChild = FindVisualChildren<T>(child);
-                    if (childOfChild != null)
-                    {
-                        foreach (var subchild in childOfChild)
-                        {
-                            yield return subchild;
-                        }
-                    }
-                }
-            }
-        }
+		#endregion
 
-        ~MainWindow()
+		#region help functions
+
+		private void AddNewWidget(Character ch)
+		{
+			Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = ch }); }));
+		}
+
+		private void UpdateWidget(Character ch)
+		{
+			foreach(MyItem mi in vm.AllItems)
+			{
+				if (mi.CharacterCard.Equals(ch))
+				{
+					mi.CharacterCard.Update(ch);
+				}
+			}
+		}
+
+		private Character _get_character_from_url(string _url)
+		{
+			return JsonConvert.DeserializeObject<Character>(ps.SendGet(_url));
+		}
+
+		private string _get_local_ip()
+		{
+			var host = Dns.GetHostEntry(Dns.GetHostName());
+			foreach (var ip in host.AddressList)
+			{
+				if (ip.AddressFamily == AddressFamily.InterNetwork)
+				{
+					return ip.ToString();
+				}
+			}
+			throw new Exception("No network adapters with an IPv4 address in the system!");
+		}
+
+		private void Qr_Generate()
+		{
+			string ip = _get_local_ip();
+
+			txb_ip.Text = "IP: " + ip;
+
+			QrEncoder encoder = new QrEncoder(ErrorCorrectionLevel.M);
+			QrCode qrCode;
+			encoder.TryEncode(ip, out qrCode);
+			WriteableBitmapRenderer wRenderer = new WriteableBitmapRenderer(new FixedModuleSize(2, QuietZoneModules.Two), Colors.Black, Colors.White);
+			WriteableBitmap wBitmap = new WriteableBitmap(50, 50, 35, 35, PixelFormats.Gray8, null);
+			wRenderer.Draw(wBitmap, qrCode.Matrix);
+
+			QrCodeImage.Source = wBitmap;
+		}
+
+		private IEnumerable<T> FindVisualChildren<T>(DependencyObject obj) where T : DependencyObject
+		{
+			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+			{
+				DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+				if (child != null && child is T)
+				{
+					yield return (T)child;
+				}
+				else
+				{
+					var childOfChild = FindVisualChildren<T>(child);
+					if (childOfChild != null)
+					{
+						foreach (var subchild in childOfChild)
+						{
+							yield return subchild;
+						}
+					}
+				}
+			}
+		}
+
+		#endregion
+
+		#region Constructors/Destructors
+
+		public MainWindow()
+		{
+			ps = new PostService();
+			InitializeComponent();
+			DataContext = vm;
+
+			vm.AllItems = new ObservableCollection<MyItem>();
+
+			#region TestRegion
+			//TEST
+			//Character myCharacter = new Character();
+			//myCharacter.Name = "Squirtle";
+			//myCharacter.Class = "Pokemon";
+			//myCharacter.Description = "Typ Wodny";
+			//Stat testParam = new Stat { Name = "Strength", Value = 100 };
+			//Stat testParam2 = new Stat { Name = "Agility", Value = 100 };
+			//Stat testParam3 = new Stat { Name = "Luck", Value = 100 };
+			//Stat testParam4 = new Stat { Name = "Power", Value = 100 };
+			//List<Stat> testList = new List<Stat>();
+			//testList.Add(testParam);
+			//testList.Add(testParam2);
+			//testList.Add(testParam3);
+			//testList.Add(testParam4);
+			//myCharacter.Stats = testList;
+			//MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = myCharacter };
+			//vm.AllItems.Add(testItem);
+			#endregion
+
+			Qr_Generate();
+
+			ps.es += getEvent;
+			//ps.Start();
+		}
+
+		~MainWindow()
         {
             ps.Stop();
         }
-    }
+
+		#endregion
+	}
 }
