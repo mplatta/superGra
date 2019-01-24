@@ -42,8 +42,22 @@ namespace server.Controllers
         {
             Database db = new Database();
 
-            JObject result = new JObject();
-            result.Add("Status", db.InsertCharacter(character));           
+            JObject result = db.InsertCharacter(character);            
+
+            dynamic json = JsonConvert.DeserializeObject(result.ToString());
+
+            bool add = json.Status;
+            int id = json.Id;
+
+            if (add)
+            {
+                JObject q = new JObject();
+                q.Add("Action", 2);
+                q.Add("CharacterId", id);
+
+                QueueController.queue[QueueController.GM].Enqueue(q);
+            }
+
             return Ok(result);            
         }
 
@@ -153,6 +167,28 @@ namespace server.Controllers
             
             JObject result = new JObject();
             result.Add("Status", db.UpdateCharacter(id, characterName, characterDescription, characterClass));
+
+            return Ok(result);
+        }
+
+        [Route("api/character/Update")]
+        [HttpPost]
+        public IHttpActionResult Update([FromBody] Character character)
+        {
+            Database db = new Database();
+            bool add = db.Update(character);
+            JObject result = new JObject();
+            result.Add("Status", add);
+
+            if (add && QueueController.queue.ContainsKey(character.Id))
+            {
+                JObject q = new JObject();
+                q.Add("Action", 3);
+                q.Add("CharacterId", character.CharacterId);
+
+                QueueController.queue[QueueController.GM].Enqueue(q);               
+                QueueController.queue[character.Id].Enqueue(q);
+            }                    
 
             return Ok(result);
         }

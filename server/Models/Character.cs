@@ -6,7 +6,8 @@ namespace server.Models
 {
     public class Character
     {
-        public int Id { get; set; }
+        public String Id { get; set; }
+        public int CharacterId { get; set; }        
         public string Name { get; set; }
         public string Description { get; set; }
         public string Class { get; set; }
