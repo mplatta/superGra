@@ -1,1 +1,1 @@
-napisać tu coś
+Aplikacja ulatwiajaca zarzadzanie gra rpg
