@@ -18,7 +18,7 @@ namespace server
             Database db = new Database();
             db.Start();
 
-            QueueController.queue.Add("GameMaster", new Queue<Newtonsoft.Json.Linq.JObject>());
+            QueueController.queue.Add(QueueController.GM, new Queue<Newtonsoft.Json.Linq.JObject>());
 
             Thread thread = new Thread(AsynchronousSocketListener.StartListening);
             thread.Start();

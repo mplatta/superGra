@@ -13,6 +13,7 @@ namespace server.Controllers
     public class QueueController : ApiController
     {
         public static Dictionary<string, Queue<JObject>> queue = new Dictionary<string, Queue<JObject>>();
+        public static String GM = "GameMaster";
 
         [Route("api/queue/GetQueue")]
         [HttpPost]
@@ -25,7 +26,7 @@ namespace server.Controllers
             {
                 queue.Add(id, new Queue<JObject>());
                 json.Add("Action", 1);
-                queue["GameMaster"].Enqueue(json);
+                queue[GM].Enqueue(json);
             }
 
             JObject result = new JObject();
@@ -47,7 +48,7 @@ namespace server.Controllers
         {
             bool added = true;
             dynamic jsonToQueue = JsonConvert.DeserializeObject(json.ToString());
-            String id = jsonToQueue.Id;
+            String id = jsonToQueue.ToId;
 
             if (queue.ContainsKey(id))
             {
