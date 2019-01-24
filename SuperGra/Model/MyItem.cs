@@ -9,9 +9,7 @@ namespace SuperGra.Model
 {
     public class MyItem : INotifyPropertyChanged, IMovable
     {
-        public string Nick { get; set; }
-        public string UserType { get; set; }
-        public string Description { get; set; }
+        public Character CharacterCard { get; set; }
 
         #region Image
         string _ImageUri;
@@ -79,7 +77,5 @@ namespace SuperGra.Model
         }
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
-
-        public List<Attribute> UserAttributes { get; set; }
     }
 }

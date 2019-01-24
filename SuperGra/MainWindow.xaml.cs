@@ -12,6 +12,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -25,17 +26,18 @@ namespace SuperGra
         MainViewModel vm = new MainViewModel();
         Data.Repository repository = new Data.Repository();
         private ImageBrush imagePhoto { get; set; }
-		private PostService ps;
+        private PostService ps;
 
-		public void getEvent(Object sender, EventString e)
-		{
-			dynamic jsonResult = JsonConvert.DeserializeObject(e.JsonString);
-			string id = jsonResult.Id;
+        public void getEvent(Object sender, EventString e)
+        {
+            dynamic jsonResult = JsonConvert.DeserializeObject(e.JsonString);
+            string id = jsonResult.Id;
+            Character test = new Character { Id = id, Class = "FDF" };
 
-			Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = id, Nick = id }); }));
-		}
+            Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = test }); }));
+        }
 
-		public MainWindow()
+        public MainWindow()
         {
             ps = new PostService();
             InitializeComponent();
@@ -44,32 +46,40 @@ namespace SuperGra
             vm.AllItems = new ObservableCollection<MyItem>();
 
             #region TestRegion
-            // TEST
-            Model.Attribute testParam = new Model.Attribute("Strength", 100);
-            Model.Attribute testParam2 = new Model.Attribute("Agility", 100);
-            Model.Attribute testParam3 = new Model.Attribute("Luck", 100);
-            Model.Attribute testParam4 = new Model.Attribute("Power", 100);
-            List<Model.Attribute> testList = new List<Model.Attribute>();
-            testList.Add(testParam);
-            testList.Add(testParam2);
-            testList.Add(testParam3);
-            testList.Add(testParam4);
-            MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(),
-                Nick = "Squirtle", UserType = "Pokemon", UserAttributes = testList };
-            vm.AllItems.Add(testItem);
+            //TEST
+            //Character myCharacter = new Character();
+            //myCharacter.Name = "Squirtle";
+            //myCharacter.Class = "Pokemon";
+            //myCharacter.Description = "Typ Wodny";
+            //Stat testParam = new Stat { Name = "Strength", Value = 100 };
+            //Stat testParam2 = new Stat { Name = "Agility", Value = 100 };
+            //Stat testParam3 = new Stat { Name = "Luck", Value = 100 };
+            //Stat testParam4 = new Stat { Name = "Power", Value = 100 };
+            //List<Stat> testList = new List<Stat>();
+            //testList.Add(testParam);
+            //testList.Add(testParam2);
+            //testList.Add(testParam3);
+            //testList.Add(testParam4);
+            //myCharacter.Stats = testList;
+            //MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = myCharacter };
+            //vm.AllItems.Add(testItem);
             #endregion
 
-            qr_Generate();
+            Qr_Generate();
 
             ps.es += getEvent;
             ps.Start();
         }
 
-        private void bAdd_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-			//vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
-			Debug.WriteLine(ps.SendNews("{'Id':'gggg', 'Action':1}").ToString());
-		}
+
+            //vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
+            //Debug.WriteLine(ps.SendNews("{'Id':'gggg', 'Action':1}").ToString());
+            //         Character test = new Character { Id = "22", Class = "FDF" };
+
+            //         Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = test }); }));
+        }
 
         private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -81,26 +91,26 @@ namespace SuperGra
             vm.AllItems = repository.Load<ObservableCollection<MyItem>>();
         }
 
-		private string _getLocalIp()
-		{
-			var host = Dns.GetHostEntry(Dns.GetHostName());
-			foreach (var ip in host.AddressList)
-			{
-				if (ip.AddressFamily == AddressFamily.InterNetwork)
-				{
-					return ip.ToString();
-				}
-			}
-			throw new Exception("No network adapters with an IPv4 address in the system!");
-		}
-
-        private void qr_Generate()
+        private string _getLocalIp()
         {
-			string ip = _getLocalIp();
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
 
-			txb_ip.Text = "IP: " + ip;
-			
-			QrEncoder encoder = new QrEncoder(ErrorCorrectionLevel.M);
+        private void Qr_Generate()
+        {
+            string ip = _getLocalIp();
+
+            txb_ip.Text = "IP: " + ip;
+
+            QrEncoder encoder = new QrEncoder(ErrorCorrectionLevel.M);
             QrCode qrCode;
             encoder.TryEncode(ip, out qrCode);
             WriteableBitmapRenderer wRenderer = new WriteableBitmapRenderer(new FixedModuleSize(2, QuietZoneModules.Two), Colors.Black, Colors.White);
@@ -110,7 +120,7 @@ namespace SuperGra
             QrCodeImage.Source = wBitmap;
         }
 
-        private void bLoadMap_Click(object sender, RoutedEventArgs e)
+        private void BtnLoadMap_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog op = new OpenFileDialog();
             op.Title = "Select a picture";
@@ -121,8 +131,8 @@ namespace SuperGra
             if (op.ShowDialog() == true)
             {
                 var myCanvas = FindVisualChildren<Canvas>(mylist);
-                
-                foreach(var i in myCanvas )
+
+                foreach (var i in myCanvas)
                 {
                     if (i.Name == "myCanvas")
                     {
@@ -157,8 +167,8 @@ namespace SuperGra
             }
         }
 
-		~MainWindow()
-		{
+        ~MainWindow()
+        {
             ps.Stop();
         }
     }
