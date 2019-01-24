@@ -4,14 +4,14 @@
         xmlns:local="clr-namespace:SuperGra.Helpers"
         Title="SuperGra" Height="600" Width="1024" WindowState="Maximized">
     <Window.Resources>
-        <DataTemplate x:Key="Widget">
-            <Grid Background="LightGray" local:Attached.CanDrag="True" Height="350" Width="325" Tag="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}">
+        <DataTemplate x:Key="Widget" x:Name="nWidget">
+            <Grid Background="LightGray" local:Attached.CanDrag="True" Height="450" Width="325" Tag="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="125"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="29"/>
                     <RowDefinition Height="80"/>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="100"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
@@ -39,13 +39,27 @@
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="4">
-                    <!--<TreeView x:Name="StatisticMenu">
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate DataType="{x:Type self:MenuItem}" ItemsSource="{Binding Items}">
-                                <TextBlock Text="{Binding Title}" />
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView--><!-->-->
+                    <DockPanel HorizontalAlignment="Left">
+                        <Label FontWeight="Bold" Content="Stats:"/>
+                        <ListView ItemsSource="{Binding UserParameters}" VerticalAlignment="Bottom">
+                            <ListView.View>
+                                <GridView ColumnHeaderToolTip="Stats">
+                                    <GridViewColumn Header="Parameter" DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}"/>
+                                    <GridViewColumn Header="Option">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Content="Edit" Margin="5, 0"/>
+                                                    <Button Content="Delete" Margin="5, 0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </DockPanel>
                 </Grid>
             </Grid>
         </DataTemplate>

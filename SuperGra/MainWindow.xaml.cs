@@ -37,25 +37,38 @@ namespace SuperGra
 
 		public MainWindow()
         {
-			ps = new PostService();
-			InitializeComponent();
+            ps = new PostService();
+            InitializeComponent();
             DataContext = vm;
 
             vm.AllItems = new ObservableCollection<MyItem>();
-            for (var i = 0; i < 5; i++)
-            {
-                vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle", UserType="Pokemon" });
-            }
+
+            #region TestRegion
+            // TEST
+            Parameter testParam = new Parameter("Strength", 100);
+            Parameter testParam2 = new Parameter("Agility", 100);
+            Parameter testParam3 = new Parameter("Luck", 100);
+            Parameter testParam4 = new Parameter("Power", 100);
+            List<Parameter> testList = new List<Parameter>();
+            testList.Add(testParam);
+            testList.Add(testParam2);
+            testList.Add(testParam3);
+            testList.Add(testParam4);
+            MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(),
+                Nick = "Squirtle", UserType = "Pokemon", UserParameters = testList };
+            vm.AllItems.Add(testItem);
+            #endregion
+
             qr_Generate();
 
-			ps.es += getEvent;
-			ps.Start();
-		}
+            ps.es += getEvent;
+            ps.Start();
+        }
 
         private void bAdd_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			//vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
-			Debug.WriteLine(ps.sendNews("{'Id':'gggg', 'Action':1}").ToString());
+			Debug.WriteLine(ps.SendNews("{'Id':'gggg', 'Action':1}").ToString());
 		}
 
         private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -146,7 +159,7 @@ namespace SuperGra
 
 		~MainWindow()
 		{
-			ps.Stop();
-		}
+            ps.Stop();
+        }
     }
 }
