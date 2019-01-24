@@ -16,7 +16,7 @@ namespace server.Controllers
         [HttpGet]
         public IEnumerable<Character> GetAllCharacters()
         {
-            Database db = Database.Instance;
+            Database db = new Database();
             List<Character> characters = db.GetCharacters();
 
             return characters;
@@ -25,7 +25,7 @@ namespace server.Controllers
         [HttpGet]
         public IHttpActionResult GetCharacter(int id)
         {
-            Database db = Database.Instance;
+            Database db = new Database();
             var character = db.GetCharacter(id);
            
             if (character == null)
@@ -40,10 +40,11 @@ namespace server.Controllers
         [HttpPost]
         public IHttpActionResult CreateCharacter([FromBody] Character character)
         {
-            Database db = Database.Instance;
-            Result test = new Result { Status =  db.InsertCharacter(character)};            
+            Database db = new Database();
 
-            return Ok(test);            
+            JObject result = new JObject();
+            result.Add("Status", db.InsertCharacter(character));           
+            return Ok(result);            
         }
 
         [Route("api/character/DeleteCharacter")]
@@ -51,9 +52,11 @@ namespace server.Controllers
         public IHttpActionResult DeleteCharacter([FromBody] JObject json)
         {
             dynamic jsonToId = JsonConvert.DeserializeObject(json.ToString());
-            Database db = Database.Instance;
-            int id = jsonToId.Id;
-            Result result = new Result { Status = db.DeleteCharacter(id) };
+            Database db = new Database();
+            int id = jsonToId.Id;           
+
+            JObject result = new JObject();
+            result.Add("Status", db.DeleteCharacter(id));
 
             return Ok(result);
         }
@@ -63,10 +66,12 @@ namespace server.Controllers
         public IHttpActionResult DeleteStat([FromBody] JObject json)
         {
             dynamic jsonToId = JsonConvert.DeserializeObject(json.ToString());
-            Database db = Database.Instance;
+            Database db = new Database();
             int id = jsonToId.Id;
-            String statName = jsonToId.StatName;
-            Result result = new Result { Status = db.DeleteStat(id, statName) };
+            String statName = jsonToId.StatName;            
+
+            JObject result = new JObject();
+            result.Add("Status", db.DeleteStat(id, statName));
 
             return Ok(result);
         }
@@ -76,10 +81,12 @@ namespace server.Controllers
         public IHttpActionResult DeleteItem([FromBody] JObject json)
         {
             dynamic jsonToId = JsonConvert.DeserializeObject(json.ToString());
-            Database db = Database.Instance;
+            Database db = new Database();
             int id = jsonToId.Id;
             String itemName = jsonToId.ItemName;
-            Result result = new Result { Status = db.DeleteItem(id, itemName) };
+            
+            JObject result = new JObject();
+            result.Add("Status", db.DeleteItem(id, itemName));
 
             return Ok(result);
         }
@@ -89,12 +96,14 @@ namespace server.Controllers
         public IHttpActionResult AddStat([FromBody] JObject json)
         {
             dynamic jsonToId = JsonConvert.DeserializeObject(json.ToString());
-            Database db = Database.Instance;
+            Database db = new Database();
             int id = jsonToId.Id;
             String statName = jsonToId.StatName;
             int statValue = jsonToId.StatValue;
             Stat stat = new Stat { Name = statName, Value = statValue };
-            Result result = new Result { Status = db.AddStat(id, stat) };
+            
+            JObject result = new JObject();
+            result.Add("Status", db.AddStat(id, stat));
 
             return Ok(result);
         }
@@ -104,10 +113,12 @@ namespace server.Controllers
         public IHttpActionResult AddItem([FromBody] JObject json)
         {
             dynamic jsonToId = JsonConvert.DeserializeObject(json.ToString());
-            Database db = Database.Instance;
+            Database db = new Database();
             int id = jsonToId.Id;
             String itemName = jsonToId.ItemName;            
-            Result result = new Result { Status = db.AddItem(id, itemName) };
+            
+            JObject result = new JObject();
+            result.Add("Status", db.AddItem(id, itemName));
 
             return Ok(result);
         }
@@ -117,12 +128,14 @@ namespace server.Controllers
         public IHttpActionResult UpdateStat([FromBody] JObject json)
         {
             dynamic jsonToId = JsonConvert.DeserializeObject(json.ToString());
-            Database db = Database.Instance;
+            Database db = new Database();
             int id = jsonToId.Id;
             String statName = jsonToId.StatName;
             int statValue = jsonToId.StatValue;
             Stat stat = new Stat { Name = statName, Value = statValue };
-            Result result = new Result { Status = db.UpdateStat(id, stat) };
+           
+            JObject result = new JObject();
+            result.Add("Status", db.UpdateStat(id, stat));
 
             return Ok(result);
         }
@@ -132,12 +145,14 @@ namespace server.Controllers
         public IHttpActionResult UpdateCharacter([FromBody] JObject json)
         {
             dynamic jsonToId = JsonConvert.DeserializeObject(json.ToString());
-            Database db = Database.Instance;
+            Database db = new Database();
             int id = jsonToId.Id;            
             String characterName = jsonToId.CharacterName;
             String characterDescription = jsonToId.CharacterDescription;
             String characterClass = jsonToId.CharacterClass;            
-            Result result = new Result { Status = db.UpdateCharacter(id, characterName, characterDescription, characterClass) };
+            
+            JObject result = new JObject();
+            result.Add("Status", db.UpdateCharacter(id, characterName, characterDescription, characterClass));
 
             return Ok(result);
         }

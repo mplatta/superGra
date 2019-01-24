@@ -15,7 +15,7 @@ namespace server
 	{
 		protected void Application_Start()
 		{
-            Database db = Database.Instance;
+            Database db = new Database();
             db.Start();
 
             QueueController.queue.Add("GameMaster", new Queue<Newtonsoft.Json.Linq.JObject>());

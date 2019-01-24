@@ -45,7 +45,7 @@ namespace server.Controllers
         [HttpPost]
         public IHttpActionResult AddQueue(JObject json)
         {
-            bool added = false;
+            bool added = true;
             dynamic jsonToQueue = JsonConvert.DeserializeObject(json.ToString());
             String id = jsonToQueue.Id;
 
@@ -55,10 +55,11 @@ namespace server.Controllers
             }
             else
             {
-                added = true;
+                added = false;
             }
 
-            Result result = new Result { Status = added };
+            JObject result = new JObject();
+            result.Add("Status", added);
 
             return Ok(result);
         }
