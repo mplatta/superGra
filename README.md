@@ -1,1 +1,1 @@
-Aplikacja ulatwiajaca zarzadzanie gra rpg
+v0.99
