@@ -86,7 +86,7 @@
     <Compile Include="Helpers\Serialisation.cs" />
     <Compile Include="Model\IMovable.cs" />
     <Compile Include="Model\MyItem.cs" />
-    <Compile Include="Model\Parameter.cs" />
+    <Compile Include="Model\Attribute.cs" />
     <Compile Include="Model\PostService.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">

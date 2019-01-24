@@ -45,17 +45,17 @@ namespace SuperGra
 
             #region TestRegion
             // TEST
-            Parameter testParam = new Parameter("Strength", 100);
-            Parameter testParam2 = new Parameter("Agility", 100);
-            Parameter testParam3 = new Parameter("Luck", 100);
-            Parameter testParam4 = new Parameter("Power", 100);
-            List<Parameter> testList = new List<Parameter>();
+            Model.Attribute testParam = new Model.Attribute("Strength", 100);
+            Model.Attribute testParam2 = new Model.Attribute("Agility", 100);
+            Model.Attribute testParam3 = new Model.Attribute("Luck", 100);
+            Model.Attribute testParam4 = new Model.Attribute("Power", 100);
+            List<Model.Attribute> testList = new List<Model.Attribute>();
             testList.Add(testParam);
             testList.Add(testParam2);
             testList.Add(testParam3);
             testList.Add(testParam4);
             MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(),
-                Nick = "Squirtle", UserType = "Pokemon", UserParameters = testList };
+                Nick = "Squirtle", UserType = "Pokemon", UserAttributes = testList };
             vm.AllItems.Add(testItem);
             #endregion
 

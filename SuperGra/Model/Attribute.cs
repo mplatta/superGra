@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace SuperGra.Model
 {
-    public class Parameter
+    public class Attribute
     {
         public string Name { get; set; }
         public int Value { get; set; }
 
-        public Parameter()
+        public Attribute()
         {
         }
 
-        public Parameter(string Name, int Value)
+        public Attribute(string Name, int Value)
         {
             this.Name = Name;
             this.Value = Value;

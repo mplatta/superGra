@@ -52,7 +52,7 @@ namespace SuperGra.Model
         }
 
         double _Y;
-        private List<Parameter> _parameterList;
+        private List<Attribute> _parameterList;
 
         public double Y
         {
@@ -80,9 +80,6 @@ namespace SuperGra.Model
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
-        #region Parameters
-        
-        public List<Parameter> UserParameters { get; set; }
-        #endregion
+        public List<Attribute> UserAttributes { get; set; }
     }
 }
