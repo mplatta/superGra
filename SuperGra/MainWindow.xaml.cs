@@ -2,6 +2,7 @@
 using Gma.QrCodeNet.Encoding.Windows.Render;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using server.Models;
 using SuperGra.Model;
 using SuperGra.ViewModel;
 using System;
@@ -31,8 +32,36 @@ namespace SuperGra
 		{
 			dynamic jsonResult = JsonConvert.DeserializeObject(e.JsonString);
 			string id = jsonResult.Id;
+			int action = jsonResult.Action;
 
-			Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = id, Nick = id }); }));
+			string url = "http://localhost:34450/api/character/";
+			//string character;
+			Character character;
+
+			switch (action)
+			{
+				case 1:
+					;
+					break;
+				case 2:
+					url += jsonResult.IdCharacter;
+					//character = ps.SendGet(url);
+					character = JsonConvert.DeserializeObject<Character>(ps.SendGet(url));
+					addNewWidget(character, id);
+					break;
+				case 3:
+					;
+					break;
+				case 4:
+					;
+					break;
+			}
+			//Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = id, Nick = id }); }));
+		}
+
+		public void addNewWidget(Character ch, string id)
+		{
+			Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = ch.Description, Nick = ch.Name }); }));
 		}
 
 		public MainWindow()
@@ -42,11 +71,13 @@ namespace SuperGra
             DataContext = vm;
 
             vm.AllItems = new ObservableCollection<MyItem>();
-            for (var i = 0; i < 5; i++)
-            {
-                vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle", UserType="Pokemon" });
-            }
             qr_Generate();
+
+			string json = "{\"Id\":4,\"Name\":\"Test1\",\"Description\":\"Test1\",\"Class\":\"AAA\",\"Stats\":[{\"Name\":\"AGI\",\"Value\":59},{\"Name\":\"HP\",\"Value\":52}],\"Equipment\":[\"Sword\",\"Axe\"]}";
+
+			//Character test = new Character();
+
+			//Debug.WriteLine(test.ToString());
 
 			ps.es += getEvent;
 			ps.Start();
@@ -55,7 +86,7 @@ namespace SuperGra
         private void bAdd_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			//vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
-			Debug.WriteLine(ps.sendNews("{'Id':'gggg', 'Action':1}").ToString());
+			Debug.WriteLine(ps.SendNews("{'Id':'gggg', 'Action':1}").ToString());
 		}
 
         private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)

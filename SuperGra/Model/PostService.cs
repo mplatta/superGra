@@ -21,6 +21,7 @@ namespace SuperGra.Model
 		private static bool _is_start;
 		private static int  _sleep_time;
 
+
 		public EventHandler<EventString> es;
 
 		#region Public api
@@ -58,6 +59,19 @@ namespace SuperGra.Model
 			}
 
 			return false;
+		}
+
+		public string SendGet(string url)
+		{
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+			request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+			using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+			using (Stream stream = response.GetResponseStream())
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				return reader.ReadToEnd();
+			}
 		}
 
 		#endregion
