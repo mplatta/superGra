@@ -84,9 +84,11 @@
     <Compile Include="Data\Repository.cs" />
     <Compile Include="Helpers\Attached.cs" />
     <Compile Include="Helpers\Serialisation.cs" />
+    <Compile Include="Model\Character.cs" />
     <Compile Include="Model\IMovable.cs" />
     <Compile Include="Model\MyItem.cs" />
     <Compile Include="Model\PostService.cs" />
+    <Compile Include="Model\Stat.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

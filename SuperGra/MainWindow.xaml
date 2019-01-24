@@ -4,43 +4,96 @@
         xmlns:local="clr-namespace:SuperGra.Helpers"
         Title="SuperGra" Height="600" Width="1024" WindowState="Maximized">
     <Window.Resources>
-        <DataTemplate x:Key="Widget">
-            <Grid Background="LightGray" local:Attached.CanDrag="True" Height="350" Width="325" Tag="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}">
+        <DataTemplate x:Key="Widget" x:Name="nWidget">
+            <Grid Background="LightGray" local:Attached.CanDrag="True" Height="450" Width="325" Tag="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="125"/>
                     <RowDefinition Height="125"/>
                     <RowDefinition Height="25"/>
-                    <RowDefinition Height="29"/>
-                    <RowDefinition Height="80"/>
-                    <RowDefinition Height="60"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-                    <Image Source="{Binding TheImage}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="125" />
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Image Source="{Binding TheImage}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="100" />
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <StackPanel Margin="0, 20">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0, 2">
+                                <Label Content="Nick:" VerticalContentAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding Path=CharacterCard.Name, Mode=TwoWay}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0, 2" >
+                                <Label FontWeight="Bold" Content="Class:" HorizontalAlignment="Center"/>
+                                <TextBox Text="{Binding CharacterCard.Class}" HorizontalAlignment="Center"
+                                         TextWrapping="Wrap" Background="LightGray" BorderThickness="0"
+                                         Margin="0, 5"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
                 <Grid Grid.Row="1">
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Nick:" VerticalContentAlignment="Center" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Nick}" VerticalAlignment="Center" Width="200"/>
-                    </StackPanel>
-                </Grid>
-                <Grid Grid.Row="2">
-                    <StackPanel Orientation="Horizontal">
-                        <Label  Margin="2" FontWeight="Bold" Content="Class:" HorizontalAlignment="Center"/>
-                        <TextBox Margin="2" Width="250" Text="{Binding UserType}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                    </StackPanel>
-                </Grid>
-                <Grid Grid.Row="3">
                     <StackPanel Orientation="Vertical">
                         <Label  Margin="2" FontWeight="Bold" Content="Description:" HorizontalAlignment="Left"/>
                         <ScrollViewer Height="50">
-                            <TextBox Text="{Binding Description}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            <TextBox Text="{Binding CharacterCard.Description}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" />
                         </ScrollViewer>
                     </StackPanel>
                 </Grid>
+                <Grid Grid.Row="2">
+                    <DockPanel>
+                        <Label FontWeight="Bold" Content="Statistics:" DockPanel.Dock="Top"/>
+                        <Button Content="Add" DockPanel.Dock="Bottom" Margin="0, 2"/>
+                        <ListView ItemsSource="{Binding CharacterCard.Stats}">
+                            <ListView.View>
+                                <GridView ColumnHeaderToolTip="User Stats">
+                                    <GridViewColumn Header="Attribute" DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}"/>
+                                    <GridViewColumn Header="Option">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Content="Edit" Margin="5, 0"/>
+                                                    <Button Content="Delete" Margin="5, 0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </DockPanel>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <DockPanel>
+                        <Label FontWeight="Bold" Content="Equipment:" DockPanel.Dock="Top"/>
+                        <ListView ItemsSource="{Binding CharacterCard.Stats}">
+                            <ListView.View>
+                                <GridView ColumnHeaderToolTip="User Stats">
+                                    <GridViewColumn Header="Attribute" DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="Option">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Content="Edit" Margin="5, 0"/>
+                                                    <Button Content="Delete" Margin="5, 0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </DockPanel>
+                </Grid>
                 <Grid Grid.Row="4">
-                    <TreeView x:Name="StatisticView">
-                    </TreeView>
+                    <Button Content="Update"/>
                 </Grid>
             </Grid>
         </DataTemplate>
@@ -83,10 +136,10 @@
         </Grid>
         <Grid Grid.Column="1">
             <StackPanel VerticalAlignment="Top" Margin="0 10">
-                <Button x:Name="bAdd" Content="Add" Width="100" Click="bAdd_Click" Margin="5 0" />
+                <Button x:Name="bAdd" Content="Add" Width="100" Click="BtnAdd_Click" Margin="5 0" />
                 <Button x:Name="bSave" Content="Save" Width="100" Click="bSave_Click" Margin="5 0" />
                 <Button x:Name="bLoad" Content="Load" Width="100" Click="bLoad_Click" Margin="5 0" />
-                <Button x:Name="bLoadMap" Content="Load Map" Width="100" Click="bLoadMap_Click" Margin="5 0" />
+                <Button x:Name="bLoadMap" Content="Load Map" Width="100" Click="BtnLoadMap_Click" Margin="5 0" />
             </StackPanel>
             
             <StackPanel VerticalAlignment="Bottom" Margin="20">
