@@ -63,14 +63,26 @@ namespace SuperGra.Model
 
 		public string SendGet(string url)
 		{
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-			request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+			WebRequest request = WebRequest.Create(url);
+			request.Credentials = CredentialCache.DefaultCredentials;
 
-			using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-			using (Stream stream = response.GetResponseStream())
-			using (StreamReader reader = new StreamReader(stream))
+			try
 			{
-				return reader.ReadToEnd();
+				WebResponse response = request.GetResponse();
+
+				Stream dataStream = response.GetResponseStream();
+				StreamReader reader = new StreamReader(dataStream);
+
+				string result = reader.ReadToEnd();
+
+				reader.Close();
+				response.Close();
+
+				return result;
+			}
+			catch
+			{
+				return null;
 			}
 		}
 

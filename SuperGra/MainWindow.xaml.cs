@@ -26,7 +26,7 @@ namespace SuperGra
     {
 		// TODO: Zrobić z tego jakiś ładny MVC kiedyś xD
 
-		private static readonly string url             = "http://localhost:34450/";
+		private static readonly string url             = "http://localhost:34450/api/";
 		private static readonly string apiGetCharacter = "character";
 
 		private ImageBrush imagePhoto { get; set; }
@@ -54,12 +54,12 @@ namespace SuperGra
 				case 2: // someone create new character
 					// TODO: niezabezpieczone jak null albo zerwie połaczenie
 					character = _get_character_from_url(url + apiGetCharacter + "/" + jsonResult.CharacterId.ToString());
-					AddNewWidget(character);
+					if (character != null) AddNewWidget(character);
 					break;
 				case 3: // someone update charater
 					// TODO: niezabezpieczone jak null albo zerwie połaczenie
 					character = _get_character_from_url(url + apiGetCharacter + "/" + jsonResult.CharacterId.ToString());
-					UpdateWidget(character);
+					if (character != null) UpdateWidget(character);
 					break;
 				case 4: // dice roll
 					;
@@ -141,7 +141,12 @@ namespace SuperGra
 
 		private Character _get_character_from_url(string _url)
 		{
-			return JsonConvert.DeserializeObject<Character>(ps.SendGet(_url));
+			string json = ps.SendGet(_url);
+
+			if (json != null) 
+				return JsonConvert.DeserializeObject<Character>(ps.SendGet(_url));
+
+			return null;
 		}
 
 		private string _get_local_ip()
@@ -231,7 +236,7 @@ namespace SuperGra
 			Qr_Generate();
 
 			ps.es += getEvent;
-			//ps.Start();
+			ps.Start();
 		}
 
 		~MainWindow()

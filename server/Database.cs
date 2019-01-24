@@ -26,8 +26,8 @@ namespace server
 
         public void Start()
         {
-            //DropTables();
-            CreateCharacterTable();
+			DropTables();
+			CreateCharacterTable();
             CreateEquipmentTable();
             CreateStatsTable();
         }       

@@ -25,12 +25,12 @@
                         <StackPanel Margin="0, 20">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0, 2">
                                 <Label Content="Nick:" VerticalContentAlignment="Center" FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Path=CharacterCard.Name, Mode=TwoWay}"
+								<TextBlock Text="{Binding Path=CharacterCard.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                            VerticalAlignment="Center"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0, 2" >
                                 <Label FontWeight="Bold" Content="Class:" HorizontalAlignment="Center"/>
-                                <TextBox Text="{Binding CharacterCard.Class}" HorizontalAlignment="Center"
+								<TextBox Text="{Binding CharacterCard.Class, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"
                                          TextWrapping="Wrap" Background="LightGray" BorderThickness="0"
                                          Margin="0, 5"/>
                             </StackPanel>
@@ -41,7 +41,7 @@
                     <StackPanel Orientation="Vertical">
                         <Label  Margin="2" FontWeight="Bold" Content="Description:" HorizontalAlignment="Left"/>
                         <ScrollViewer Height="50">
-                            <TextBox Text="{Binding CharacterCard.Description}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+							<TextBox Text="{Binding CharacterCard.Description, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" />
                         </ScrollViewer>
                     </StackPanel>
@@ -50,7 +50,7 @@
                     <DockPanel>
                         <Label FontWeight="Bold" Content="Statistics:" DockPanel.Dock="Top"/>
                         <Button Content="Add" DockPanel.Dock="Bottom" Margin="0, 2"/>
-                        <ListView ItemsSource="{Binding CharacterCard.Stats}">
+						<ListView ItemsSource="{Binding CharacterCard.Stats, UpdateSourceTrigger=PropertyChanged}">
                             <ListView.View>
                                 <GridView ColumnHeaderToolTip="User Stats">
                                     <GridViewColumn Header="Attribute" DisplayMemberBinding="{Binding Name}"/>
@@ -73,7 +73,7 @@
                 <Grid Grid.Row="3">
                     <DockPanel>
                         <Label FontWeight="Bold" Content="Equipment:" DockPanel.Dock="Top"/>
-                        <ListView ItemsSource="{Binding CharacterCard.Stats}">
+						<ListView ItemsSource="{Binding CharacterCard.Stats}">
                             <ListView.View>
                                 <GridView ColumnHeaderToolTip="User Stats">
                                     <GridViewColumn Header="Attribute" DisplayMemberBinding="{Binding Name}"/>

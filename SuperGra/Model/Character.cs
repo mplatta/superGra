@@ -1,16 +1,130 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace SuperGra.Model
 {
-    public class Character
-    {
-        public string       Id          { get; set; }
-        public int          IdCharacter { get; set; }
-        public string       Name        { get; set; }
-        public string       Description { get; set; }
-        public string       Class       { get; set; }
-        public List<Stat>   Stats       { get; set; }
-        public List<string> Equipment   { get; set; }
+    public class Character : INotifyPropertyChanged
+	{
+		private string _id;
+		private int _id_character;
+		private string _name;
+		private string _description;
+		private string _class;
+		private List<Stat> _stats;
+		private List<string> _equipment;
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		#region Getters/Setters
+
+		public string Id
+		{
+			get
+			{
+				return _id;
+			}
+
+			set
+			{
+				_id = value;
+				OnPropertyChanged(nameof(Id));
+			}
+		}
+
+		public int IdCharacter
+		{
+			get
+			{
+				return _id_character;
+			}
+
+			set
+			{
+				_id_character = value;
+				OnPropertyChanged(nameof(IdCharacter));
+			}
+		}
+
+		public string Name
+		{
+			get
+			{
+				return _name;
+			}
+
+			set
+			{
+				_name = value;
+				OnPropertyChanged(nameof(Name));
+			}
+		}
+
+		public string Description
+		{
+			get
+			{
+				return _description;
+			}
+
+			set
+			{
+				_description = value;
+				OnPropertyChanged(nameof(Description));
+			}
+		}
+
+		public string Class
+		{
+			get
+			{
+				return _class;
+			}
+
+			set
+			{
+				_class = value;
+				OnPropertyChanged(nameof(Class));
+			}
+		}
+
+		public List<Stat> Stats
+		{
+			get
+			{
+				return _stats;
+			}
+
+			set
+			{
+				_stats = value;
+				OnPropertyChanged(nameof(Stats));
+			}
+		}
+
+		public List<string> Equipment
+		{
+			get
+			{
+				return _equipment;
+			}
+
+			set
+			{
+				_equipment = value;
+				OnPropertyChanged(nameof(Equipment));
+			}
+		}
+
+		#endregion
+
+		protected void OnPropertyChanged(string name)
+		{
+			PropertyChangedEventHandler handler = PropertyChanged;
+			if (handler != null)
+			{
+				handler(this, new PropertyChangedEventArgs(name));
+			}
+		}
 
 		public void Update(Character ch)
 		{
