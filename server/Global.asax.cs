@@ -15,6 +15,8 @@ namespace server
 	{
 		protected void Application_Start()
 		{
+            LocalDB.CreateLocalDB("Database");
+
             Database db = new Database();
             db.Start();
 
