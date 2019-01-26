@@ -1,9 +1,5 @@
 ﻿using server.Controllers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -20,10 +16,10 @@ namespace server
             Database db = new Database();
             db.Start();
 
-            QueueController.queue.Add(QueueController.GM, new Queue<Newtonsoft.Json.Linq.JObject>());
+            QueueController.queue.Add(QueueController.GM, new Queue<Newtonsoft.Json.Linq.JObject>());            
 
-            Thread thread = new Thread(AsynchronousSocketListener.StartListening);
-            thread.Start();
+            //Thread thread = new Thread(AsynchronousSocketListener.StartListening);
+            //thread.Start();
 
             AreaRegistration.RegisterAllAreas();
 			GlobalConfiguration.Configure(WebApiConfig.Register);

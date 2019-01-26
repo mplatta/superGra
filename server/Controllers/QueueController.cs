@@ -1,11 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using server.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace server.Controllers
@@ -13,7 +9,7 @@ namespace server.Controllers
     public class QueueController : ApiController
     {
         public static Dictionary<string, Queue<JObject>> queue = new Dictionary<string, Queue<JObject>>();
-        public static String GM = "GameMaster";
+        public const String GM = "GameMaster";
 
         [Route("api/queue/GetQueue")]
         [HttpPost]

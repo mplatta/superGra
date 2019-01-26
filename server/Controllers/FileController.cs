@@ -1,90 +1,50 @@
-﻿using Newtonsoft.Json.Linq;
-using server.Models;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace server.Controllers
 {
     public class FileController : ApiController
     {
+        private static int nextAvatar = 1;
+
         [Route("api/avatar/Upload")]
         [HttpPost]
-        public async Task<IHttpActionResult> PostAvatar([FromUri] string fileName)
+        public async Task<IHttpActionResult> PostAvatar([FromUri] string id)
         {
             byte[] file = await Request.Content.ReadAsByteArrayAsync();
 
             bool upload = true;
 
-            string root = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/Avatar/");
+            string root = HttpContext.Current.Server.MapPath("~/App_Data/Avatar/");
 
             if (!Directory.Exists(root))
             {
                 Directory.CreateDirectory(root);
             }
 
-            root += fileName;
+            root += nextAvatar + ".jpg";
+
+            Image avatar;
 
             try
             {
-                using (var fs = new FileStream(root, FileMode.Create, FileAccess.Write))
+                using (var ms = new MemoryStream(file))
                 {
-                    fs.Write(file, 0, file.Length);                    
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Exception caught in process: {0}", ex);
-                upload = false;
-            }
-
-            JObject result = new JObject();
-            result.Add("Status", upload);           
-
-            return Ok(result);
-        }
-
-        [Route("api/avatar/Download")]
-        [HttpGet]
-        public byte[] GetAvatar([FromUri] string fileName)
-        {
-            string root = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/Avatar/");
-            root += fileName;
-
-            byte[] file = File.ReadAllBytes(root);            
-
-            return file;
-        }
-
-        [Route("api/map/Upload")]
-        [HttpPost]
-        public async Task<IHttpActionResult> PostMap([FromUri] string fileName)
-        {
-            byte[] file = await Request.Content.ReadAsByteArrayAsync();
-
-            bool upload = true;
-
-            string root = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/Map/");
-
-            if (!Directory.Exists(root))
-            {
-                Directory.CreateDirectory(root);
-            }
-
-            root += fileName;
-
-            try
-            {
-                using (var fs = new FileStream(root, FileMode.Create, FileAccess.Write))
-                {
-                    fs.Write(file, 0, file.Length);
+                    avatar = Image.FromStream(ms);
+                    avatar.Save(root, ImageFormat.Jpeg);
+                    nextAvatar++;                    
                 }
             }
             catch (Exception ex)
@@ -96,20 +56,39 @@ namespace server.Controllers
             JObject result = new JObject();
             result.Add("Status", upload);
 
+            if (upload)
+            {
+                JObject q = new JObject();
+                q.Add("Action", 7);
+                q.Add("Id", id);
+                q.Add("Path", root);
+                QueueController.queue[QueueController.GM].Enqueue(q);
+            }
+
             return Ok(result);
         }
 
         [Route("api/map/Download")]
-        [HttpGet]
-        public byte[] GetMap([FromUri] string fileName)
-        {
-            string root = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/Map/");
-            root += fileName;
+        [HttpPost]
+        public IHttpActionResult GetMap([FromBody] JObject json)
+        {           
+            dynamic jsonToPath = JsonConvert.DeserializeObject(json.ToString());
+            string path = jsonToPath.Path;            
+            byte[] dataBytes = File.ReadAllBytes(path);
+            MemoryStream dataStream = new MemoryStream(dataBytes);
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StreamContent(dataStream)
+            };
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = "Map.jpeg"
+            };
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
 
-            byte[] file = File.ReadAllBytes(root);
+            ResponseMessageResult response = ResponseMessage(result);
 
-            return file;
-        }
-
+            return response;
+        }        
     }
 }
