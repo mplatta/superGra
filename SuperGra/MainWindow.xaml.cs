@@ -162,9 +162,28 @@ namespace SuperGra
 			throw new Exception("No network adapters with an IPv4 address in the system!");
 		}
 
+		private List<String> _get_local_ip2()
+		{
+			List<String> ips = new List<String>();
+			IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+
+			foreach (var ip in host.AddressList)
+			{
+				if (ip.AddressFamily == AddressFamily.InterNetwork)
+				{
+					ips.Add(ip.ToString());
+				}
+			}
+
+			return ips;
+		}
+
 		private void Qr_Generate()
 		{
-			string ip = _get_local_ip();
+			//string ip = _get_local_ip();
+			List<String> arrIp = _get_local_ip2();
+
+			string ip = arrIp[arrIp.Count - 1];
 
 			txb_ip.Text = "IP: " + ip;
 
