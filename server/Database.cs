@@ -341,7 +341,7 @@ namespace server
 
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                if (reader.Read())
+                while (reader.Read())
                 {
                     String statName = reader.GetString(0);
                     int statValue = reader.GetInt32(1);
@@ -357,7 +357,7 @@ namespace server
 
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                if (reader.Read())
+                while (reader.Read())
                 {
                     String equipmentName = reader.GetString(0);
                     character.Equipment.Add(equipmentName);
