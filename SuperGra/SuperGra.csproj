@@ -82,6 +82,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\Repository.cs" />
+    <Compile Include="Dialogs\DialogResults.cs" />
+    <Compile Include="Dialogs\DialogService.cs" />
+    <Compile Include="Dialogs\DialogViewModelBase.cs" />
+    <Compile Include="Dialogs\DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\EditStat\EditStatDialogView.xaml.cs">
+      <DependentUpon>EditStatDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\EditStat\EditStatDialogViewModel.cs" />
+    <Compile Include="Dialogs\IDialogService.cs" />
+    <Compile Include="Dialogs\IDialogWindow.cs" />
+    <Compile Include="Dialogs\SendMessage\SendMessageDialogView.xaml.cs">
+      <DependentUpon>SendMessageDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SendMessage\SendMessageDialogViewModel.cs" />
     <Compile Include="Helpers\Attached.cs" />
     <Compile Include="Helpers\Serialisation.cs" />
     <Compile Include="Model\Character.cs" />
@@ -89,7 +105,22 @@
     <Compile Include="Model\MyItem.cs" />
     <Compile Include="Model\PostService.cs" />
     <Compile Include="Model\Stat.cs" />
+    <Compile Include="Utilities\EventArgs.cs" />
+    <Compile Include="Utilities\EventRaiser.cs" />
+    <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Page Include="Dialogs\DialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\EditStat\EditStatDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\SendMessage\SendMessageDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -153,6 +184,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Media\snorlax.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dialogs\Service\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
