@@ -49,18 +49,18 @@
                 <Grid Grid.Row="2">
                     <DockPanel>
                         <Label FontWeight="Bold" Content="Statistics:" DockPanel.Dock="Top"/>
-                        <Button Content="Add" DockPanel.Dock="Bottom" Margin="0, 2"/>
-						<ListView ItemsSource="{Binding CharacterCard.Stats, UpdateSourceTrigger=PropertyChanged}">
+                        <Button Content="Add Stat" DockPanel.Dock="Bottom" Margin="0, 2"/>
+                        <ListView ItemsSource="{Binding CharacterCard.Stats, UpdateSourceTrigger=PropertyChanged}" x:Name="lvStats" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListView.View>
                                 <GridView ColumnHeaderToolTip="User Stats">
-                                    <GridViewColumn Header="Attribute" DisplayMemberBinding="{Binding Name}"/>
-                                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}"/>
-                                    <GridViewColumn Header="Option">
+                                    <GridViewColumn Header="Attribute" DisplayMemberBinding="{Binding Name}" Width="100"/>
+                                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}" Width="100"/>
+                                    <GridViewColumn Header="Option" Width="125">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Button Content="Edit" Margin="5, 0"/>
-                                                    <Button Content="Delete" Margin="5, 0"/>
+                                                    <Button Content="Edit" Margin="5, 0" Command="{Binding DataContext.EditStatCommand, RelativeSource={RelativeSource AncestorType=Canvas}}" CommandParameter="{Binding}"/>
+                                                    <Button Content="X" Margin="5, 0" Command="{Binding DataContext.TestCommand, RelativeSource={RelativeSource AncestorType=Canvas}}" CommandParameter="{Binding}"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -73,16 +73,17 @@
                 <Grid Grid.Row="3">
                     <DockPanel>
                         <Label FontWeight="Bold" Content="Equipment:" DockPanel.Dock="Top"/>
-						<ListView ItemsSource="{Binding CharacterCard.Stats}">
+                        <Button Content="Add Equipment" DockPanel.Dock="Bottom" Margin="0, 2"/>
+                        <ListView ItemsSource="{Binding CharacterCard.Equipment}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListView.View>
-                                <GridView ColumnHeaderToolTip="User Stats">
-                                    <GridViewColumn Header="Attribute" DisplayMemberBinding="{Binding Name}"/>
+                                <GridView ColumnHeaderToolTip="User Equipment">
+                                    <GridViewColumn DisplayMemberBinding="{Binding}" Header="Equipment" Width="200"/>
                                     <GridViewColumn Header="Option">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
+                                                <StackPanel Orientation="Horizontal" Width="125">
                                                     <Button Content="Edit" Margin="5, 0"/>
-                                                    <Button Content="Delete" Margin="5, 0"/>
+                                                    <Button Content="X" Margin="5, 0"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -140,6 +141,7 @@
                 <Button x:Name="bSave" Content="Save" Width="100" Click="bSave_Click" Margin="5 0" />
                 <Button x:Name="bLoad" Content="Load" Width="100" Click="bLoad_Click" Margin="5 0" />
                 <Button x:Name="bLoadMap" Content="Load Map" Width="100" Click="BtnLoadMap_Click" Margin="5 0" />
+                <Button x:Name="bSendMessage" Content="Send Message" Width="100" Margin="5 0" Command="{Binding SendMessageCommand}" />
             </StackPanel>
             
             <StackPanel VerticalAlignment="Bottom" Margin="20">

@@ -2,6 +2,7 @@
 using Gma.QrCodeNet.Encoding.Windows.Render;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using SuperGra.Dialogs;
 using SuperGra.Model;
 using SuperGra.ViewModel;
 using System;
@@ -12,7 +13,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -22,7 +22,7 @@ namespace SuperGra
     /// Interaction logic for MainWindow.xaml
     /// </summary>
 	/// 
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDialogWindow
     {
 		// TODO: Zrobić z tego jakiś ładny MVC kiedyś xD
 
@@ -226,37 +226,40 @@ namespace SuperGra
 
 		public MainWindow()
 		{
-			ps = new PostService();
-			InitializeComponent();
+            ps = new PostService();
+            InitializeComponent();
 			DataContext = vm;
 
 			vm.AllItems = new ObservableCollection<MyItem>();
 
-			#region TestRegion
-			//TEST
-			//Character myCharacter = new Character();
-			//myCharacter.Name = "Squirtle";
-			//myCharacter.Class = "Pokemon";
-			//myCharacter.Description = "Typ Wodny";
-			//Stat testParam = new Stat { Name = "Strength", Value = 100 };
-			//Stat testParam2 = new Stat { Name = "Agility", Value = 100 };
-			//Stat testParam3 = new Stat { Name = "Luck", Value = 100 };
-			//Stat testParam4 = new Stat { Name = "Power", Value = 100 };
-			//List<Stat> testList = new List<Stat>();
-			//testList.Add(testParam);
-			//testList.Add(testParam2);
-			//testList.Add(testParam3);
-			//testList.Add(testParam4);
-			//myCharacter.Stats = testList;
-			//MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = myCharacter };
-			//vm.AllItems.Add(testItem);
-			#endregion
+            #region TestRegion
+            //TEST
+            Character myCharacter = new Character();
+            myCharacter.Name = "Squirtle";
+            myCharacter.Class = "Pokemon";
+            myCharacter.Description = "Typ Wodny";
+            Stat testParam = new Stat { Name = "Strength", Value = 100 };
+            Stat testParam2 = new Stat { Name = "Agility", Value = 100 };
+            Stat testParam3 = new Stat { Name = "Luck", Value = 100 };
+            Stat testParam4 = new Stat { Name = "Power", Value = 100 };
+            List<Stat> testList = new List<Stat>();
+            testList.Add(testParam);
+            testList.Add(testParam2);
+            testList.Add(testParam3);
+            testList.Add(testParam4);
+            myCharacter.Stats = testList;
+            List<string> testEQList = new List<string>();
+            testEQList.Add("sword");
+            testEQList.Add("dupa");
+            myCharacter.Equipment = testEQList;
+            MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = myCharacter };
+            vm.AllItems.Add(testItem);
+            #endregion
+            Qr_Generate();
 
-			Qr_Generate();
-
-			ps.es += getEvent;
-			ps.Start();
-		}
+            ps.es += getEvent;
+            ps.Start();
+        }
 
 		~MainWindow()
         {
