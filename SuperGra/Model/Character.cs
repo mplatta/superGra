@@ -141,5 +141,43 @@ namespace SuperGra.Model
 		{
 			return Id.Equals(((Character)obj).Id);
 		}
+
+		public string getJSONString()
+		{
+			string result = "{";
+
+			result += "\"Id\":\"" + _id + "\",";
+			result += "\"CharacterId\":" + _id_character.ToString() + ",";
+			result += "\"Name\":\"" + _name + "\",";
+			result += "\"Description\":\"" + _description + "\",";
+			result += "\"Class\":\"" + _class + "\",";
+			result += "\"Stats\":[";
+
+			int count = 1;
+
+			foreach (Stat s in _stats)
+			{
+
+				result += "{\"Name\":\"" + s.Name + "\",\"Value\":" + s.Value.ToString();
+				result += (count < _stats.Count) ? "}," : "}";
+				count++;
+			}
+
+			result += "],";
+			result += "\"Equipment\":[";
+
+			count = 1;
+			foreach (string s in _equipment)
+			{
+				result += "\"" + s + "\"";
+				if (count < _equipment.Count) result += ",";
+				count++;
+			}
+			result += "]";
+
+			result += "}";
+
+			return result;
+		}
 	}
 }
