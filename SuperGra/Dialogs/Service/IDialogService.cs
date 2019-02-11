@@ -8,6 +8,6 @@ namespace SuperGra.Dialogs
 {
     public interface IDialogService
     {
-        T OpenDialog<T>(DialogViewModelBase<T> viewModel);
+        DialogResults<T> OpenDialog<T>(DialogViewModelBase<T> viewModel);
     }
 }

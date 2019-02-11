@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace SuperGra.Dialogs.SendMessage
 {
-    public class SendMessageDialogViewModel : DialogViewModelBase<DialogResults>
+    public class SendMessageDialogViewModel : DialogViewModelBase<DialogDecisions>
     {
         public ICommand YesCommand { get; private set; }
         public ICommand NoCommand { get; private set; }
@@ -19,14 +19,20 @@ namespace SuperGra.Dialogs.SendMessage
             NoCommand = new RelayCommand<IDialogWindow>(No);
         }
 
+        //public SendMessageDialogViewModel(string title, Stat obj) : base(title, obj)
+        //{
+        //    YesCommand = new RelayCommand<IDialogWindow>(Yes);
+        //    NoCommand = new RelayCommand<IDialogWindow>(No);
+        //}
+
         private void Yes(IDialogWindow window)
         {
-            CloseDialogWithResult(window, DialogResults.Yes);
+            CloseDialogWithResult(window, DialogDecisions.Yes);
         }
 
         private void No(IDialogWindow window)
         {
-            CloseDialogWithResult(window, DialogResults.No);
+            CloseDialogWithResult(window, DialogDecisions.No);
         }
     }
 }

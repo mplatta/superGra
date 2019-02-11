@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace SuperGra.Model
@@ -10,10 +11,11 @@ namespace SuperGra.Model
 		private string _name;
 		private string _description;
 		private string _class;
-		private List<Stat> _stats;
-		private List<string> _equipment;
+        private ObservableCollection<Stat> _stats;
+        //private List<string> _equipment;
+        private ObservableCollection<string> _equipment;
 
-		public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
 		#region Getters/Setters
 
@@ -87,7 +89,7 @@ namespace SuperGra.Model
 			}
 		}
 
-		public List<Stat> Stats
+		public ObservableCollection<Stat> Stats
 		{
 			get
 			{
@@ -101,7 +103,7 @@ namespace SuperGra.Model
 			}
 		}
 
-		public List<string> Equipment
+		public ObservableCollection<string> Equipment
 		{
 			get
 			{
