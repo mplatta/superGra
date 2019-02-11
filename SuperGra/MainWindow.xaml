@@ -49,7 +49,7 @@
                 <Grid Grid.Row="2">
                     <DockPanel>
                         <Label FontWeight="Bold" Content="Statistics:" DockPanel.Dock="Top"/>
-                        <Button Content="Add Stat" DockPanel.Dock="Bottom" Margin="0, 2"/>
+                        <Button Content="Add Stat" DockPanel.Dock="Bottom" Margin="0, 2" Command="{Binding DataContext.AddStatCommand, RelativeSource={RelativeSource AncestorType=Canvas}}" CommandParameter="{Binding}"/>
                         <ListView ItemsSource="{Binding CharacterCard.Stats, UpdateSourceTrigger=PropertyChanged}" x:Name="lvStats" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListView.View>
                                 <GridView ColumnHeaderToolTip="User Stats">
@@ -60,7 +60,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Button Content="Edit" Margin="5, 0" Command="{Binding DataContext.EditStatCommand, RelativeSource={RelativeSource AncestorType=Canvas}}" CommandParameter="{Binding}"/>
-                                                    <Button Content="X" Margin="5, 0" Command="{Binding DataContext.TestCommand, RelativeSource={RelativeSource AncestorType=Canvas}}" CommandParameter="{Binding}"/>
+                                                    <Button Content="X" Margin="5, 0" Command="{Binding DataContext.DeleteStatCommand, RelativeSource={RelativeSource AncestorType=Canvas}}" CommandParameter="{Binding}"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -73,8 +73,8 @@
                 <Grid Grid.Row="3">
                     <DockPanel>
                         <Label FontWeight="Bold" Content="Equipment:" DockPanel.Dock="Top"/>
-                        <Button Content="Add Equipment" DockPanel.Dock="Bottom" Margin="0, 2"/>
-                        <ListView ItemsSource="{Binding CharacterCard.Equipment}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <Button Content="Add Equipment" DockPanel.Dock="Bottom" Margin="0, 2" Command="{Binding DataContext.AddEquipmentCommand, RelativeSource={RelativeSource AncestorType=Canvas}}" CommandParameter="{Binding}" />
+                        <ListView ItemsSource="{Binding CharacterCard.Equipment, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListView.View>
                                 <GridView ColumnHeaderToolTip="User Equipment">
                                     <GridViewColumn DisplayMemberBinding="{Binding}" Header="Equipment" Width="200"/>
@@ -82,7 +82,7 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal" Width="125">
-                                                    <Button Content="Edit" Margin="5, 0"/>
+                                                    <Button Content="Edit" Margin="5, 0" Command="{Binding DataContext.EditEquipmentCommand, RelativeSource={RelativeSource AncestorType=Canvas}}" CommandParameter="{Binding}"/>
                                                     <Button Content="X" Margin="5, 0"/>
                                                 </StackPanel>
                                             </DataTemplate>

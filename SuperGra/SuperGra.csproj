@@ -82,18 +82,30 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\Repository.cs" />
+    <Compile Include="Dialogs\AddEquipment\AddEquipmentDialogView.xaml.cs">
+      <DependentUpon>AddEquipmentDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\AddEquipment\AddEquipmentDialogViewModel.cs" />
+    <Compile Include="Dialogs\AddStat\AddStatDialogView.xaml.cs">
+      <DependentUpon>AddStatDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\AddStat\AddStatDialogViewModel.cs" />
     <Compile Include="Dialogs\DialogResults.cs" />
-    <Compile Include="Dialogs\DialogService.cs" />
-    <Compile Include="Dialogs\DialogViewModelBase.cs" />
-    <Compile Include="Dialogs\DialogWindow.xaml.cs">
+    <Compile Include="Dialogs\EditEquipment\EditEquipmentDialogView.xaml.cs">
+      <DependentUpon>EditEquipmentDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\EditEquipment\EditEquipmentDialogViewModel.cs" />
+    <Compile Include="Dialogs\Service\DialogService.cs" />
+    <Compile Include="Dialogs\Service\DialogViewModelBase.cs" />
+    <Compile Include="Dialogs\Service\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\EditStat\EditStatDialogView.xaml.cs">
       <DependentUpon>EditStatDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\EditStat\EditStatDialogViewModel.cs" />
-    <Compile Include="Dialogs\IDialogService.cs" />
-    <Compile Include="Dialogs\IDialogWindow.cs" />
+    <Compile Include="Dialogs\Service\IDialogService.cs" />
+    <Compile Include="Dialogs\Service\IDialogWindow.cs" />
     <Compile Include="Dialogs\SendMessage\SendMessageDialogView.xaml.cs">
       <DependentUpon>SendMessageDialogView.xaml</DependentUpon>
     </Compile>
@@ -109,7 +121,19 @@
     <Compile Include="Utilities\EventRaiser.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Page Include="Dialogs\DialogWindow.xaml">
+    <Page Include="Dialogs\AddEquipment\AddEquipmentDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\AddStat\AddStatDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\EditEquipment\EditEquipmentDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Service\DialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -185,9 +209,7 @@
   <ItemGroup>
     <Resource Include="Media\snorlax.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\Service\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

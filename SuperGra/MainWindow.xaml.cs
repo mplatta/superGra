@@ -77,7 +77,6 @@ namespace SuperGra
 
 		private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-
             //vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
             //Debug.WriteLine(ps.SendNews("{'Id':'gggg', 'Action':1}").ToString());
             //         Character test = new Character { Id = "22", Class = "FDF" };
@@ -85,7 +84,7 @@ namespace SuperGra
             //         Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = test }); }));
         }
 
-		private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             repository.Save<ObservableCollection<MyItem>>(vm.AllItems);
         }
@@ -197,7 +196,7 @@ namespace SuperGra
 			QrCodeImage.Source = wBitmap;
 		}
 
-		private IEnumerable<T> FindVisualChildren<T>(DependencyObject obj) where T : DependencyObject
+		public static IEnumerable<T> FindVisualChildren<T>(DependencyObject obj) where T : DependencyObject
 		{
 			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
 			{
@@ -226,7 +225,7 @@ namespace SuperGra
 
 		public MainWindow()
 		{
-            ps = new PostService();
+            //ps = new PostService();
             InitializeComponent();
 			DataContext = vm;
 
@@ -242,13 +241,13 @@ namespace SuperGra
             Stat testParam2 = new Stat { Name = "Agility", Value = 100 };
             Stat testParam3 = new Stat { Name = "Luck", Value = 100 };
             Stat testParam4 = new Stat { Name = "Power", Value = 100 };
-            List<Stat> testList = new List<Stat>();
+            ObservableCollection<Stat> testList = new ObservableCollection<Stat>();
             testList.Add(testParam);
             testList.Add(testParam2);
             testList.Add(testParam3);
             testList.Add(testParam4);
             myCharacter.Stats = testList;
-            List<string> testEQList = new List<string>();
+            ObservableCollection<string> testEQList = new ObservableCollection<string>();
             testEQList.Add("sword");
             testEQList.Add("dupa");
             myCharacter.Equipment = testEQList;
@@ -257,13 +256,13 @@ namespace SuperGra
             #endregion
             Qr_Generate();
 
-            ps.es += getEvent;
-            ps.Start();
+            //ps.es += getEvent;
+            //ps.Start();
         }
 
 		~MainWindow()
         {
-            ps.Stop();
+            //ps.Stop();
         }
 
 		#endregion

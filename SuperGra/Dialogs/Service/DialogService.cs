@@ -8,12 +8,20 @@ namespace SuperGra.Dialogs
 {
     public class DialogService : IDialogService
     {
-        public T OpenDialog<T>(DialogViewModelBase<T> viewModel)
+        public DialogResults<T> OpenDialog<T>(DialogViewModelBase<T> viewModel)
         {
             IDialogWindow window = new DialogWindow();
             window.DataContext = viewModel;
             window.ShowDialog();
-            return viewModel.DialogResult;
+
+            DialogResults<T> dialogResults = new DialogResults<T>
+            {
+                decisions = viewModel.DialogResult,
+                Equipment = viewModel.Equipment,
+                MyStat = viewModel.NewStat
+            };
+
+            return dialogResults;
         }
     }
 }

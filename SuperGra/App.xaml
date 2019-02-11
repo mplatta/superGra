@@ -4,13 +4,25 @@
              xmlns:local="clr-namespace:SuperGra"
              xmlns:sendmessage="clr-namespace:SuperGra.Dialogs.SendMessage"
              xmlns:editstat="clr-namespace:SuperGra.Dialogs.EditStat"
+             xmlns:editequip="clr-namespace:SuperGra.Dialogs.EditEquipment"
+             xmlns:addstat="clr-namespace:SuperGra.Dialogs.AddStat"
+             xmlns:addequip="clr-namespace:SuperGra.Dialogs.AddEquipment"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type sendmessage:SendMessageDialogViewModel}">
             <sendmessage:SendMessageDialogView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type editstat:EditStatDialogView}">
+        <DataTemplate DataType="{x:Type editstat:EditStatDialogViewModel}">
             <editstat:EditStatDialogView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type editequip:EditEquipmentDialogViewModel}">
+            <editequip:EditEquipmentDialogView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type addstat:AddStatDialogViewModel}">
+            <addstat:AddStatDialogView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type addequip:AddEquipmentDialogViewModel}">
+            <addequip:AddEquipmentDialogView/>
         </DataTemplate>
     </Application.Resources>
 </Application>

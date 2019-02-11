@@ -1,19 +1,19 @@
-﻿using SuperGra.Model;
-using SuperGra.Utilities;
+﻿using SuperGra.Utilities;
+using System.Diagnostics;
 using System.Windows.Input;
 
-namespace SuperGra.Dialogs.EditStat
+namespace SuperGra.Dialogs.EditEquipment
 {
-    public class EditStatDialogViewModel : DialogViewModelBase<DialogDecisions>
+    public class EditEquipmentDialogViewModel : DialogViewModelBase<DialogDecisions>
     {
         public ICommand ChangeCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
 
-        public EditStatDialogViewModel(string title, Stat obj) : base(title, obj)
+        public EditEquipmentDialogViewModel(string title, string equipment) : base(title, equipment)
         {
             ChangeCommand = new RelayCommand<IDialogWindow>(Change);
             CancelCommand = new RelayCommand<IDialogWindow>(Cancel);
-        }
+        }        
 
         private void Change(IDialogWindow window)
         {
