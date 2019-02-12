@@ -149,10 +149,24 @@ namespace SuperGra
 		{
 			string json = ps.SendGet(_url);
 
-			if (json != null) 
-				return JsonConvert.DeserializeObject<Character>(ps.SendGet(_url));
+			
 
-			return null;
+			Character ch;
+
+			if (json == null) return null;
+			
+			ch =  JsonConvert.DeserializeObject<Character>(ps.SendGet(_url));
+
+			dynamic ttt = JsonConvert.DeserializeObject(json);
+			int id = ttt.CharacterId;
+
+			Debug.WriteLine("GGG" + id.ToString());
+			Debug.WriteLine("AAA" + json);
+			Debug.WriteLine("BBB" + ch.getJSONString());
+
+			ch.IdCharacter = id;
+
+			return ch;
 		}
 
 		private string _get_local_ip()
@@ -232,45 +246,45 @@ namespace SuperGra
 
 		public MainWindow()
 		{
-            //ps = new PostService();
-            InitializeComponent();
+			ps = new PostService();
+			InitializeComponent();
 			DataContext = vm;
 
 			vm.AllItems = new ObservableCollection<MyItem>();
 
-            #region TestRegion
-            //TEST
-            Character myCharacter = new Character();
-            myCharacter.Id = "TEST";
-            myCharacter.Name = "Squirtle";
-            myCharacter.Class = "Pokemon";
-            myCharacter.Description = "Typ Wodny";
-            Stat testParam = new Stat { Name = "Strength", Value = 100 };
-            Stat testParam2 = new Stat { Name = "Agility", Value = 100 };
-            Stat testParam3 = new Stat { Name = "Luck", Value = 100 };
-            Stat testParam4 = new Stat { Name = "Power", Value = 100 };
-            ObservableCollection<Stat> testList = new ObservableCollection<Stat>();
-            testList.Add(testParam);
-            testList.Add(testParam2);
-            testList.Add(testParam3);
-            testList.Add(testParam4);
-            myCharacter.Stats = testList;
-            ObservableCollection<string> testEQList = new ObservableCollection<string>();
-            testEQList.Add("sword");
-            testEQList.Add("dupa");
-            myCharacter.Equipment = testEQList;
-            MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = myCharacter };
-            vm.AllItems.Add(testItem);
-            #endregion
-            Qr_Generate();
+			//#region TestRegion
+			////TEST
+			//Character myCharacter = new Character();
+			//myCharacter.Id = "TEST";
+			//myCharacter.Name = "Squirtle";
+			//myCharacter.Class = "Pokemon";
+			//myCharacter.Description = "Typ Wodny";
+			//Stat testParam = new Stat { Name = "Strength", Value = 100 };
+			//Stat testParam2 = new Stat { Name = "Agility", Value = 100 };
+			//Stat testParam3 = new Stat { Name = "Luck", Value = 100 };
+			//Stat testParam4 = new Stat { Name = "Power", Value = 100 };
+			//ObservableCollection<Stat> testList = new ObservableCollection<Stat>();
+			//testList.Add(testParam);
+			//testList.Add(testParam2);
+			//testList.Add(testParam3);
+			//testList.Add(testParam4);
+			//myCharacter.Stats = testList;
+			//ObservableCollection<string> testEQList = new ObservableCollection<string>();
+			//testEQList.Add("sword");
+			//testEQList.Add("dupa");
+			//myCharacter.Equipment = testEQList;
+			//MyItem testItem = new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = myCharacter };
+			//vm.AllItems.Add(testItem);
+			//#endregion
+			Qr_Generate();
 
-            //ps.es += getEvent;
-            //ps.Start();
+            ps.es += getEvent;
+            ps.Start();
         }
 
 		~MainWindow()
         {
-            //ps.Stop();
+            ps.Stop();
         }
 
 		#endregion

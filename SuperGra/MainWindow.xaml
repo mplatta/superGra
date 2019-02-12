@@ -103,7 +103,7 @@
                     </DockPanel>
                 </Grid>
                 <Grid Grid.Row="4">
-                    <Button Content="Update"/>
+					<Button Content="Update" DockPanel.Dock="Bottom" Margin="0, 2" Command="{Binding DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType=Canvas}}" CommandParameter="{Binding}"/>
                 </Grid>
             </Grid>
         </DataTemplate>

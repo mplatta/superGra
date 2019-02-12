@@ -43,9 +43,10 @@ namespace SuperGra.ViewModel
         public ICommand AddEquipmentCommand { get; private set; }
         public ICommand EditStatCommand { get; private set; }
         public ICommand EditEquipmentCommand { get; private set; }
-        public ICommand DeleteStatCommand { get; private set; }
+		public ICommand DeleteStatCommand { get; private set; }
+		public ICommand UpdateCommand { get; private set; }
 
-        public MainViewModel()
+		public MainViewModel()
         {
             AllItems = new ObservableCollection<MyItem>();
 
@@ -57,6 +58,7 @@ namespace SuperGra.ViewModel
             AddStatCommand = new RelayCommand(AddStat);
             AddEquipmentCommand = new RelayCommand(AddEquipment);
             DeleteStatCommand = new RelayCommand(DeleteStat);
+			UpdateCommand = new RelayCommand(SendUpdate);
         }
 
         private void AddEquipment(object obj)
@@ -109,7 +111,18 @@ namespace SuperGra.ViewModel
             }
         }
 
-        private void SendMessage(object obj)
+		private void SendUpdate(object obj)
+		{
+			Character ch = ((MyItem)obj).CharacterCard;
+
+			PostService ps = new PostService();
+
+			Debug.WriteLine(ch.getJSONString());
+
+			ps.SendPost(PostService.IP_ADRESS + PostService.API_UPDATE_CHARACTER, ch.getJSONString());
+		}
+
+		private void SendMessage(object obj)
         {
             var dialog = new SendMessageDialogViewModel("Send Message", "Do you want send message to players?");
             var result = _dialogService.OpenDialog(dialog);

@@ -15,9 +15,10 @@ namespace SuperGra.Model
 
 	class PostService
 	{
-		private static readonly string apiGetQueue = "api/queue/GetQueue";
-		private static readonly string apiAddQueue = "api/queue/AddQueue";
-		private static readonly string ipAdress    = "http://localhost:34450/";
+		public static readonly string API_GET_QUEUE        = "api/queue/GetQueue";
+		public static readonly string API_ADD_QUEUE        = "api/queue/AddQueue";
+		public static readonly string API_UPDATE_CHARACTER = "api/character/Update";
+		public static readonly string IP_ADRESS            = "http://localhost:34450/";
 
 		private static bool _is_start;
 		private static int  _sleep_time;
@@ -43,12 +44,12 @@ namespace SuperGra.Model
 		{
 			string message = "{\"Id\":\"GameMaster\"}";
 
-			return _post_request(ipAdress + apiGetQueue, message);
+			return _post_request(IP_ADRESS + API_GET_QUEUE, message);
 		}
 
 		public bool SendNews(string jsonString)
 		{
-			string result = _post_request(ipAdress + apiAddQueue, jsonString);
+			string result = _post_request(IP_ADRESS + API_ADD_QUEUE, jsonString);
 			dynamic success;
 
 			if (result != null)
