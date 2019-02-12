@@ -50,6 +50,7 @@ namespace SuperGra.Utilities
     {
         private readonly Predicate<object> _canExecute;
         private readonly Action<object> _execute;
+        private readonly Action<string> _action;
 
         public RelayCommand(Action<object> execute)
            : this(execute, null)
@@ -67,6 +68,11 @@ namespace SuperGra.Utilities
             _canExecute = canExecute;
         }
 
+        public RelayCommand(Action<string> action)
+        {
+            _action = action;
+        }
+
         public bool CanExecute(object parameter)
         {
             return _canExecute == null || _canExecute(parameter);
@@ -74,7 +80,10 @@ namespace SuperGra.Utilities
 
         public void Execute(object parameter)
         {
-            _execute(parameter);
+            if (_action != null)
+                _action(parameter as string);
+            else
+                _execute(parameter);
         }
 
         // Ensures WPF commanding infrastructure asks all RelayCommand objects whether their

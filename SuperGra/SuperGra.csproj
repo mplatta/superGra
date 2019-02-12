@@ -81,6 +81,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\DeleteStatConverter.cs" />
     <Compile Include="Data\Repository.cs" />
     <Compile Include="Dialogs\AddEquipment\AddEquipmentDialogView.xaml.cs">
       <DependentUpon>AddEquipmentDialogView.xaml</DependentUpon>
