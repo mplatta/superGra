@@ -13,6 +13,7 @@ using System;
 using SuperGra.Dialogs.AddStat;
 using System.Windows.Controls;
 using SuperGra.Dialogs.AddEquipment;
+using System.Windows.Media;
 
 namespace SuperGra.ViewModel
 {
@@ -74,12 +75,38 @@ namespace SuperGra.ViewModel
 
         private void DeleteStat(object obj)
         {
-            //var dialog = MessageBox.Show("Are you sure?", "Title", MessageBoxButton.OKCancel);
-            
-            //if (dialog == MessageBoxResult.OK)
-            //{
-            //    Debug.WriteLine(obj);
-            //}
+            var dialog = MessageBox.Show("Are you sure?", "Delete statistics", MessageBoxButton.OKCancel);
+
+            if (dialog == MessageBoxResult.OK)
+            {
+                object[] arrayObject = (object[])obj;
+
+                ListView list = (ListView)arrayObject[0];
+                string tag = list.Tag.ToString();
+
+                Stat stat = (Stat)arrayObject[1];
+
+                int index_to_delete = -1;
+
+                foreach (MyItem m in _AllItems)
+                {
+                    if (m.CharacterCard.Id == tag)
+                    {
+                        foreach (Stat s in m.CharacterCard.Stats)
+                        {
+                            if (s.Name == stat.Name)
+                            {
+                                index_to_delete = m.CharacterCard.Stats.IndexOf(s);
+                                m.CharacterCard.Stats.Remove(s);
+
+                                break;
+                            }
+                        }
+                    }
+
+                    if (index_to_delete != -1) break;
+                }
+            }
         }
 
         private void SendMessage(object obj)
@@ -104,10 +131,9 @@ namespace SuperGra.ViewModel
             }
         }
 
-        private void EditEquipment(object equipment)
+        private void EditEquipment(object obj)
         {
-            string tmp = equipment.ToString();
-            var dialog = new EditEquipmentDialogViewModel("Edit Equipment", tmp);
+            var dialog = new EditEquipmentDialogViewModel("Edit Equipment", "dupa");
             var result = _dialogService.OpenDialog(dialog);
         }
 

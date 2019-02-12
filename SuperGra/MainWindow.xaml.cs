@@ -77,11 +77,15 @@ namespace SuperGra
 
 		private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            //vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", Description = DateTime.Now.ToString(), Nick = "Squirtle" });
-            //Debug.WriteLine(ps.SendNews("{'Id':'gggg', 'Action':1}").ToString());
-            //         Character test = new Character { Id = "22", Class = "FDF" };
+            var myCanvas = FindVisualChildren<ListView>(mylist);
 
-            //         Dispatcher.Invoke(new Action(() => { vm.AllItems.Add(new MyItem { ImageUri = "Media/squirtle.png", CharacterCard = test }); }));
+            foreach (var i in myCanvas)
+            {
+                if(i.Name == "lvStats")
+                {
+                    Debug.WriteLine(i.Items.Count);
+                }
+            }
         }
 
         private void bSave_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -131,11 +135,14 @@ namespace SuperGra
 		{
 			foreach(MyItem mi in vm.AllItems)
 			{
-				if (mi.CharacterCard.Equals(ch))
-				{
-					mi.CharacterCard.Update(ch);
-				}
-			}
+                if(mi.CharacterCard.Id != null)
+                {
+				    if (mi.CharacterCard.Equals(ch))
+				    {
+					    mi.CharacterCard.Update(ch);
+				    }
+                }
+            }
 		}
 
 		private Character _get_character_from_url(string _url)
@@ -234,6 +241,7 @@ namespace SuperGra
             #region TestRegion
             //TEST
             Character myCharacter = new Character();
+            myCharacter.Id = "TEST";
             myCharacter.Name = "Squirtle";
             myCharacter.Class = "Pokemon";
             myCharacter.Description = "Typ Wodny";

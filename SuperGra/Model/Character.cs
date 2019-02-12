@@ -12,7 +12,6 @@ namespace SuperGra.Model
 		private string _description;
 		private string _class;
         private ObservableCollection<Stat> _stats;
-        //private List<string> _equipment;
         private ObservableCollection<string> _equipment;
 
         public event PropertyChangedEventHandler PropertyChanged;
